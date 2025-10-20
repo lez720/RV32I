@@ -4,4 +4,4 @@ RISC-V RV32I Core
 
 
 ##### Block Diagram
-![](block_diagram.png)
+![](RV32I/block_diagram.png)
