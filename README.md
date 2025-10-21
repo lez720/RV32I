@@ -24,5 +24,5 @@ RV32I is the base integer instruction set architecture (ISA) for the 32-bit vari
 # EDA & IDEs
 - VS Code (RTL Design)
 - ModelSim (Functional Verification/Simulation)
-- Yoys (Synthesis)
+- Yosys (Synthesis)
 - OpenSTA (Timing Analysis)
