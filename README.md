@@ -21,3 +21,8 @@ RV32I is the base integer instruction set architecture (ISA) for the 32-bit vari
 | U-Type | For lui(load upper immediate)            |
 | J-Type | For unconditional jumps           |
 
+# EDA & IDEs
+- VS Code (RTL Design)
+- ModelSim (Functional Verification/Simulation)
+- Yoys (Synthesis)
+- OpenSTA (Timing Analysis)
