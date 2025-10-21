@@ -1,9 +1,8 @@
-# About
-
-RV32I
+# RV32I
 
 
 
 
-#### Block Diagram (WIP)
+
+## Block Diagram (WIP)
 ![](RV321/block_diagram.png)
