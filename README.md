@@ -1,7 +1,6 @@
-# ABOUT
----
+# About
 
-RISC-V RV32I Core
+RV32I
 
 
 
