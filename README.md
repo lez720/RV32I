@@ -1,6 +1,7 @@
 # RV32I
 
-
+### 5-Stage Pipeline
+Fetch (IF) > Decode (ID) > Execute (EX) > Memory (MEM) > Write Back (WB)
 
 
 
