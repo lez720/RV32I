@@ -4,9 +4,9 @@ module inst_mem #(
             DEPTH = 32
 ) (
     input               clk, rst,
-    input   [WIDTH-1:0] addr,
+    input   [WIDTH+24:0] addr,
     
-    output  [WIDTH-1:0] data_out
+    output  [WIDTH+24:0] data_out
 );
 
 reg [WIDTH-1:0] inst_mem_block  [DEPTH-1:0];

@@ -8,6 +8,7 @@ module ctrl_unit #(
     output  reg           DM_write_en,
     output  reg           port_A_sel,
     output  reg           port_B_sel,
+    output  reg           write_MUX_sel,
     output  reg           PC_MUX_sel,
     output  reg           imm_en,
     output  reg           reg_write_en
