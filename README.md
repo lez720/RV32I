@@ -11,9 +11,13 @@ RV32I is the base integer instruction set architecture (ISA) for the 32-bit vari
 
 
 ## Instruction Types
-- R-Type
-- I-Type
-- S-Type
-- B-Type
-- U-Type
-- J-Type
+
+|  Type  |  Operation |
+|--------|------------|
+| R-Type |            |
+| I-Type |            |
+| S-Type |            |
+| B-Type |            |
+| U-Type |            |
+| J-Type |            |
+
