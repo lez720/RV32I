@@ -1,4 +1,5 @@
 # RV32I
+RV32I is the base integer instruction set architecture (ISA) for the 32-bit variant of the RISC-V ISA.
 
 ## 5-Stage Pipeline
 **Fetch > Decode > Execute > Memory > Write Back**
