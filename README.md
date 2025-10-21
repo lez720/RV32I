@@ -14,10 +14,10 @@ RV32I is the base integer instruction set architecture (ISA) for the 32-bit vari
 
 |  Type  |  Operation |
 |--------|------------|
-| R-Type | Arithmetic/logical operations that use only registers.            |
-| I-Type | Arithmetic/logical operations with an immmediate(constant) value.            |
-| S-Type | Store instructions, writing data from a register to memory.            |
-| B-Type | Conditional branch instructions.            |
+| R-Type | Arithmetic/logical operations that use only registers            |
+| I-Type | Arithmetic/logical operations with an immmediate(constant) value            |
+| S-Type | Store instructions, writing data from a register to memory            |
+| B-Type | Conditional branch instructions            |
 | U-Type | For lui(load upper immediate)            |
 | J-Type | For unconditional jumps           |
 
