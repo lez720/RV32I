@@ -18,6 +18,7 @@ module RV32I_top_level #(
     wire    write_MUX_sel, PC_MUX_sel, imm_en;
     wire    reg_write_en;
 
+    // control unit
     ctrl_unit CU_inst (
         .clk(clk), .rst(rst), .opcode(), .DM_write_en(DM_write_en),
         .port_A_sel(port_A_sel), .port_B_sel(port_B_sel), .write_MUX_sel(write_MUX_sel),
@@ -29,6 +30,7 @@ module RV32I_top_level #(
     wire    [WIDTH-1:0] reg_data_in;
     wire    [WIDTH-1:0] RS1, RS2; // source register 1 & 2
 
+    // register file
     reg_file reg_file_inst (
         .clk(clk), .rst(rst), .write_en(reg_write),
         .read_en(reg_read), .data_in(reg_data_in), .write_addr(reg_w_addr),
@@ -36,8 +38,47 @@ module RV32I_top_level #(
         .data_out_2(RS2)
     );
 
+    wire    [WIDTH-1:0] imm_out;
+
+    // immediate 
+    always @(posedge clk ) begin
+        
+    end
+
 // execute
-    alu alu_inst ();
+
+    reg [WIDTH-1:0] port_A_out, port_B_out;
+
+    // port A MUX
+    always @(posedge clk ) begin
+        case (port_A_sel)
+            1'b0 : port_A_out <= RS1;
+            1'b1 : port_A_out <= imm_out;
+            default: port_A_out <= 32'bx;
+        endcase
+    end
+
+    // port B MUX
+    always @(posedge clk ) begin
+        case (port_B_sel)
+            1'b0 : port_B_out <= RS2;
+            1'b1 : port_B_out <= imm_out;
+            default: port_B_out <= 32'bx;
+        endcase
+    end
+
+    wire    alu_en;
+    wire    [WIDTH-16:0]    alu_op;
+    wire    [WIDTH-1:0]     alu_out;
+
+    // ALU
+    alu alu_inst (
+        .clk(clk), .rst(rst), .en(alu_en),
+        .port_A(), .port_B(), .operation(alu_op),
+        .data_out(alu_out)
+    );
+
+    // branch unit
     branch_unit BU_inst ();
 
 // memory
