@@ -6,7 +6,7 @@ module reg_file #(
     input               clk, rst,
     input               write_en, read_en,
     input   [WIDTH-1:0] data_in,
-    input   [WIDTH-1:0] write_addr, read_addr_1, read_addr_2
+    input   [WIDTH-1:0] write_addr, read_addr_1, read_addr_2,
     
     output  [WIDTH-1:0] data_out_1, data_out_2
 );

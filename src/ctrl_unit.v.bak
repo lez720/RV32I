@@ -1,0 +1,347 @@
+module ctrl_unit #(
+    parameter
+        WIDTH = 32
+) (
+    input   clk, rst,
+    input   [WIDTH-26:0]  opcode,
+    input   [WIDTH-29:0]  func3, 
+    input   [WIDTH-26:0]  func7,
+
+    input   [1:0] branch_op,
+    input                 alu_valid,
+    
+    output  reg [WIDTH-27:0]    alu_op,
+
+
+    output  reg           DM_write_en,
+    output  reg [1:0]           port_A_sel,
+    output  reg [1:0]          port_B_sel,
+    output  reg [1:0]       write_MUX_sel,
+    output  reg           PC_MUX_sel,
+    output  reg [1:0]       imm_en,
+    output  reg           reg_write_en,
+    output  reg           branch_en,
+    output  reg           PC_stall,
+    output  reg           alu_en,
+    output  reg           reg_read_en
+);
+    localparam IF = 5'b00001;
+    localparam ID = 5'b00010;
+    localparam EX = 5'b00100;
+    localparam MEM = 5'b01000;  
+    localparam WB = 5'b10000;
+
+    reg [4:0] state;
+
+    localparam R_type = 6'b000001;
+    localparam I_type = 6'b000010;
+    localparam S_type = 6'b000100;
+    localparam B_type = 6'b001000;
+    localparam U_type = 6'b010000;
+    localparam J_type = 6'b100000;
+
+    reg [5:0] inst_type;
+
+    always @(posedge clk ) begin
+      if (rst || state == IF) begin
+        port_A_sel <= 2'b00;
+        port_B_sel <= 0;
+        DM_write_en <= 0;
+        write_MUX_sel <= 0;
+        imm_en <= 0;
+        reg_read_en <= 0;
+        reg_write_en <= 0;
+        alu_en <= 0;
+        branch_en <= 0;
+
+        state <= ID;
+
+      end else if (state == ID) begin
+        case (opcode)
+            // R-type
+            7'b0110011 : begin
+              inst_type <= R_type;
+
+              port_A_sel <= 2'b01;
+              port_B_sel <= 0;
+              reg_read_en <= 1;
+
+              func3_R (func3, alu_op); 
+            end
+
+            // I-type
+            7'b0010011 : begin
+              inst_type <= I_type;
+
+              port_A_sel <= 2'b01;
+              port_B_sel <= 1;
+              imm_en <= 2'b01;
+              reg_read_en <= 1;
+
+              func3_I (func3, alu_op);
+            end
+            7'b0000011 : begin
+              inst_type <= I_type;
+
+            end
+            7'b1100111 : begin
+              inst_type <= I_type;
+
+            end
+
+            // S-type
+            7'b0100011 : begin
+              inst_type <= S_type;
+
+              reg_read_en <= 1;
+              DM_write_en <= 1;
+              imm_en <= 2'b10;
+              port_A_sel <= 2'b11;
+              port_B_sel <= 0;
+
+              func3_S (func3, alu_op);
+            end
+
+            // B-type
+            7'b1100011 : begin
+              inst_type <= B_type;
+
+              reg_read_en <= 1;
+              branch_en <= 1;
+              port_A_sel <= 2'b10;
+              port_B_sel <= 1;
+
+              func3_B ();
+            end
+
+            // U-type
+            7'b0010111 : begin
+              inst_type <= U_type;
+            end
+            7'b0110111 : begin
+              inst_type <= U_type;
+            end
+
+            // J-type
+            7'b1101111 : begin
+              inst_type <= J_type;
+
+              port_A_sel <= 2'b10;
+              port_B_sel <= 1;
+              imm_en <= 2'b11;
+
+              alu_op <= 5'b00000;
+            end
+        endcase
+      end else if (state == EX) begin
+        alu_en <= 1;
+        if (alu_valid) begin
+          alu_en <= 0;
+          case (inst_type)
+             R_type: begin
+               write_MUX_sel <= 2'b11;
+               state <= WB;
+             end
+             I_type: begin
+               write_MUX_sel <= 2'b11;
+               state <= WB;
+             end
+             S_type: begin
+               state <= MEM;
+             end
+             B_type: begin
+               state <= IF;
+             end
+             U_type: begin
+               state <= IF;
+             end
+             J_type: begin
+               state <= IF;
+             end
+          default: begin
+            state <= EX; 
+          end
+          endcase
+        end else begin 
+          state <= EX;
+        end
+      end else if (state == MEM) begin 
+        DM_write_en <= 1;
+        state <= IF;
+      end else if (state == WB) begin
+        reg_write_en <= 1;
+        state <= IF;
+      end
+    end
+
+    task func3_R(
+      input [2:0] func_3,
+
+      output [WIDTH-27:0] alu_operation
+    );
+    begin
+        case (func_3)
+                3'b000: begin
+                  
+                end
+                3'b001: begin
+                  
+                end
+                3'b010: begin
+                  
+                end
+                3'b011: begin
+                  
+                end
+                3'b100: begin
+                  
+                end
+                3'b101: begin
+                  
+                end
+                3'b110: begin
+                  
+                end
+                3'b111: begin
+                  
+                end
+              default: begin
+                
+
+              end
+              endcase
+    end
+    endtask
+
+    task func7_task(
+      input [6:0] func_7,
+
+      output [WIDTH-27:0] operation
+    );
+    begin
+      case (func_7)
+         7'b0000000: begin
+          
+        end
+      default: begin
+        
+      end
+      endcase 
+    end
+    endtask
+
+    task func3_I(
+      input [2:0] func_3,
+
+      output [WIDTH-27:0] alu_operation
+    );
+    begin
+        case (func_3)
+                3'b000: begin
+                  
+                end
+                3'b001: begin
+                  
+                end
+                3'b010: begin
+                  
+                end
+                3'b011: begin
+                  
+                end
+                3'b100: begin
+                  
+                end
+                3'b101: begin
+                  
+                end
+                3'b110: begin
+                  
+                end
+                3'b111: begin
+                  
+                end
+              default: begin
+                
+
+              end
+              endcase
+    end
+    endtask
+    task func3_S(
+      input [2:0] func_3,
+
+      output [WIDTH-27:0] alu_operation
+    );
+    begin
+        case (func_3)
+                3'b000: begin
+                  
+                end
+                3'b001: begin
+                  
+                end
+                3'b010: begin
+                  
+                end
+                3'b011: begin
+                  
+                end
+                3'b100: begin
+                  
+                end
+                3'b101: begin
+                  
+                end
+                3'b110: begin
+                  
+                end
+                3'b111: begin
+                  
+                end
+              default: begin
+                
+
+              end
+              endcase
+    end
+    endtask
+    task func3_B(
+      input [2:0] func_3,
+
+      output a, b, c, d, e
+    );
+    begin
+        case (func_3)
+                3'b000: begin
+                  
+                end
+                3'b001: begin
+                  
+                end
+                3'b010: begin
+                  
+                end
+                3'b011: begin
+                  
+                end
+                3'b100: begin
+                  
+                end
+                3'b101: begin
+                  
+                end
+                3'b110: begin
+                  
+                end
+                3'b111: begin
+                  
+                end
+              default: begin
+                
+
+              end
+              endcase
+    end
+    endtask
+endmodule

@@ -1,0 +1,58 @@
+# Loading project RV32I_FV
+# Compile of RV32I_top_level.v failed with 7 errors.
+# Compile of RV32I_top_level.v failed with 8 errors.
+# Compile of RV32I_top_level.v failed with 6 errors.
+# Compile of RV32I_top_level.v failed with 6 errors.
+# Compile of RV32I_top_level.v failed with 6 errors.
+# Compile of data_mem.v was successful.
+# Compile of data_mem.v was successful.
+# Compile of reg_file.v failed with 1 errors.
+# Compile of reg_file.v failed with 1 errors.
+# Compile of reg_file.v failed with 1 errors.
+# Compile of reg_file.v was successful.
+# Compile of reg_file.v was successful.
+# Compile of reg_file.v was successful.
+# Compile of inst_mem.v was successful.
+# Compile of inst_mem.v was successful.
+# Compile of inst_mem.v was successful.
+# Compile of RV32I_top_level.v failed with 6 errors.
+# Compile of RV32I_top_level.v failed with 6 errors.
+# Compile of RV32I_TB.v failed with 1 errors.
+# Compile of RV32I_top_level.v failed with 5 errors.
+# Compile of alu.v failed with 1 errors.
+# Compile of branch_unit.v failed with 2 errors.
+# Compile of ctrl_unit.v failed with 5 errors.
+# 5 compiles, 5 failed with 14 errors.
+# Compile of RV32I_TB.v failed with 1 errors.
+# Compile of RV32I_top_level.v failed with 5 errors.
+# Compile of alu.v failed with 1 errors.
+# Compile of branch_unit.v failed with 2 errors.
+# Compile of ctrl_unit.v failed with 5 errors.
+# 5 compiles, 5 failed with 14 errors.
+# Compile of RV32I_top_level.v failed with 5 errors.
+# Compile of RV32I_top_level.v failed with 5 errors.
+# Compile of RV32I_top_level.v failed with 4 errors.
+# Compile of RV32I_top_level.v failed with 3 errors.
+# Compile of RV32I_top_level.v failed with 1 errors.
+# Compile of RV32I_top_level.v was successful.
+# Compile of RV32I_top_level.v was successful.
+# Compile of RV32I_top_level.v was successful.
+# Compile of branch_unit.v failed with 2 errors.
+# Compile of branch_unit.v failed with 2 errors.
+# Compile of branch_unit.v failed with 2 errors.
+# Compile of branch_unit.v was successful.
+# Compile of branch_unit.v was successful.
+# Compile of alu.v failed with 1 errors.
+# Compile of alu.v failed with 1 errors.
+# Compile of alu.v was successful.
+# Compile of alu.v was successful.
+# Compile of alu.v was successful.
+# Compile of ctrl_unit.v failed with 5 errors.
+# Compile of ctrl_unit.v failed with 5 errors.
+# Compile of ctrl_unit.v failed with 5 errors.
+# Compile of ctrl_unit.v failed with 4 errors.
+# Compile of ctrl_unit.v failed with 5 errors.
+# Compile of ctrl_unit.v failed with 5 errors.
+# Compile of ctrl_unit.v failed with 1 errors.
+# Compile of ctrl_unit.v failed with 1 errors.
+# Compile of ctrl_unit.v was successful.

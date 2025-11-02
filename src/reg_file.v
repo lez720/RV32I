@@ -1,0 +1,27 @@
+module reg_file #(
+    parameter
+            WIDTH = 32,
+            DEPTH = 32
+) (
+    input               clk, rst,
+    input               write_en, read_en,
+    input   [WIDTH-1:0] data_in,
+    input   [WIDTH-1:0] write_addr, read_addr_1, read_addr_2,
+    
+    output  [WIDTH-1:0] data_out_1, data_out_2
+);
+
+reg [WIDTH-1:0] reg_file_block  [DEPTH-1:0];
+
+    always @(posedge clk ) begin
+        if (rst) begin
+            reg_file_block[write_addr] <= reg_file_block[write_addr];
+        end else if (read_en) begin
+            reg_file_block[write_addr] <= data_in;
+        end
+    end
+
+assign data_out_1 = reg_file_block[read_addr_1];
+assign data_out_2 = reg_file_block[read_addr_2];
+
+endmodule
