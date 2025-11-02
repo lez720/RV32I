@@ -22,8 +22,8 @@ RV32I is the base integer instruction set architecture (ISA) for the 32-bit vari
 | J-Type | For unconditional jumps           |
 
 ## EDA, IDEs, & Tools used in this project
-- VS Code (RTL Design)
-- ModelSim (Functional Verification/Simulation)
+- Neovim (RTL Design)
+- ModelSim (Functional Verification)
 - Yosys (Synthesis)
 - OpenSTA (Timing Analysis)
 - Git (Version Control)
