@@ -65,16 +65,16 @@ module alu #(
         end
         5'b10000: begin // shift right arithmetic
           
-        end /*
+        end 
         5'b11000: begin
-          
+          data_out <= port_B; // immediate to data memory address
         end
         5'b11001: begin
           
         end
         5'b11010: begin
           
-        end
+        end /*
         5'b11011: begin
           
         end

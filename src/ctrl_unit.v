@@ -14,16 +14,18 @@ module ctrl_unit #(
 
 
     output  reg           DM_write_en,
-    output  reg [1:0]           port_A_sel,
-    output  reg [1:0]          port_B_sel,
-    output  reg [1:0]       write_MUX_sel,
+    output  reg [1:0]     port_A_sel,
+    output  reg [1:0]     ort_B_sel,
+    output  reg [1:0]     write_MUX_sel,
     output  reg           PC_MUX_sel,
-    output  reg [1:0]       imm_en,
+    output  reg [1:0]     imm_en,
     output  reg           reg_write_en,
     output  reg           branch_en,
     output  reg           PC_stall,
     output  reg           alu_en,
-    output  reg           reg_read_en
+    output  reg           reg_read_en,
+    output  reg [2:0]     load_store_op,
+    output  reg           DM_read_en
 );
 
     localparam IF = 5'b00001;
@@ -54,6 +56,7 @@ module ctrl_unit #(
         reg_write_en <= 0;
         alu_en <= 0;
         branch_en <= 0;
+        load_store_op <= 0;
 
         state <= ID;
 
@@ -73,22 +76,28 @@ module ctrl_unit #(
             end
 
             // I-type
-            7'b0010011 : begin
+            7'b0010011 : begin // immediate arithmetic
               inst_type <= I_type;
+              imm_en <= 2'b01;
+              reg_read_en <= 1;
 
               port_A_sel <= 2'b01;
               port_B_sel <= 1;
-              imm_en <= 2'b01;
-              reg_read_en <= 1;
 
               func3_I_A (func3, func7, alu_op);
 
               state <= EX;
             end
-            7'b0000011 : begin
+            7'b0000011 : begin // immediate load
               inst_type <= I_type;
 
-	            func3_I_S (func3, alu_op);
+              imm_en <= 2'b01;
+
+              port_A_sel <= 2'b00;
+              port_B_sel <= 1;
+
+	            func3_I_L (func3, load_store_op);
+              alu_op <= 5'b11000;
 
               state <= EX;
             end
@@ -101,14 +110,15 @@ module ctrl_unit #(
             // S-type
             7'b0100011 : begin
               inst_type <= S_type;
+              imm_en <= 2'b10;
 
               reg_read_en <= 1;
               DM_write_en <= 1;
-              imm_en <= 2'b10;
+
               port_A_sel <= 2'b11;
               port_B_sel <= 0;
 
-              func3_S (func3, alu_op);
+              func3_S (func3, load_store_op);
 
               state <= EX;
             end
@@ -123,7 +133,7 @@ module ctrl_unit #(
               port_B_sel <= 1;
 
               if (branch) begin 
-                alu_operation <= 5'b00000;
+                alu_operation <= 5'b00001;
 
                 state <= EX;
               end
@@ -145,12 +155,12 @@ module ctrl_unit #(
             // J-type
             7'b1101111 : begin
               inst_type <= J_type;
+              imm_en <= 2'b11;
 
               port_A_sel <= 2'b10;
               port_B_sel <= 1;
-              imm_en <= 2'b11;
 
-              alu_op <= 5'b00000;
+              alu_op <= 5'b00001;
 
               state <= EX;
             end
@@ -210,7 +220,7 @@ module ctrl_unit #(
                 3'b000: begin
                   case (func_7)
                     7'b0000000: begin // addition
-                      alu_operation <= 5'b00000;
+                      alu_operation <= 5'b00001;
                     end
                     7'b0100000: begin // subtraction
                       alu_operation <= 5'b00011;
@@ -258,7 +268,7 @@ module ctrl_unit #(
     begin
         case (func_3)
                 3'b000: begin // add imm
-                  alu_operation <= 5'b00000; 
+                  alu_operation <= 5'b00001; 
                 end
                 3'b001: begin // shift left logical
                   
@@ -295,27 +305,27 @@ module ctrl_unit #(
     end
     endtask
 
-    task func3_I_S(
+    task func3_I_L(
       input [WIDTH-29:0] func_3,
 
-      output [WIDTH-27:0] alu_operation
+      output [WIDTH-27:0] operation
     );
     begin
         case (func_3)
                 3'b000: begin // load byte (sign-extend)
-                  
+                  operation <= 3'b100;
                 end
                 3'b001: begin // load half-word (sign-extend)
-                  
+                  operation <= 3'b101;
                 end
                 3'b010: begin // load word
-                  
+                  operation <= 3'b000;
                 end
                 3'b100: begin // load byte (zero-extend)
-                  
+                  operation <= 3'b110;
                 end
                 3'b101: begin // load half-word (zero-extend)
-                  
+                  operation <= 3'b111;
                 end
               default: begin
                 
@@ -328,18 +338,18 @@ module ctrl_unit #(
     task func3_S(
       input [WIDTH-29:0] func_3,
 
-      output [WIDTH-27:0] alu_operation
+      output [WIDTH-30:0] operation
     );
     begin
         case (func_3)
                 3'b000: begin // store byte (8-bit)
-                  
+                  operation <= 3'b001;
                 end
                 3'b001: begin // store half-word (16-bit)
-                  
+                  operation <= 3'b010;
                 end
                 3'b010: begin // store word (32-bit)
-                  
+                  operation <= 3'b011;
                 end
               default: begin
                 
