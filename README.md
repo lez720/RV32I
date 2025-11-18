@@ -6,7 +6,7 @@ RV32I is the base integer instruction set architecture (ISA) for the 32-bit vari
 
 
 
-## Block Diagram (WIP)
+## Block Diagram
 ![](images/block_diagram.png)
 
 
