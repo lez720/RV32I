@@ -49,7 +49,7 @@ module RV32I_top_level #(
     wire            alu_en;
     wire    [WIDTH-27:0]    alu_op;
 
-    wire    [1:0]   branch_op;
+    wire    [2:0]   branch_op;
 
     // control unit
     ctrl_unit CU_inst (

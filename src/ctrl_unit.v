@@ -7,7 +7,7 @@ module ctrl_unit #(
     input   [WIDTH-29:0]  func3, 
     input   [WIDTH-26:0]  func7,
 
-    input   [2:0] branch_op,
+    input   [2:0]         branch_op,
     input                 alu_valid,
     
     output  reg [WIDTH-27:0]    alu_op,
