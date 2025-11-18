@@ -351,39 +351,33 @@ module ctrl_unit #(
     task func3_B(
       input [2:0] func_3,
 
-      output a
+      output branch
     );
     begin
         case (func_3)
                 3'b000: begin // branch if equal
-                  if (branch_op == 3'b001) begin
-                    a <= 1;
-                  end else a <= 0;
+                  if (branch_op == 3'b001) branch <= 1;
+                  else branch <= 0;
                 end
                 3'b001: begin // branch if not equal
-                  if (branch_op == 3'b010) begin
-                    a <= 1;
-                  end else a <= 0;
+                  if (branch_op == 3'b010) branch <= 1;
+                  else branch <= 0;
                 end
                 3'b100: begin // branch if less than (signed)
-                  if (branch_op == 3'b011) begin
-                    a <= 1;
-                  end else a <= 0;
+                  if (branch_op == 3'b011) branch <= 1;
+                  else branch <= 0;
                 end
                 3'b101: begin // branch if greater/equal (signed)
-                  if (branch_op == 3'b100) begin
-                    a <= 1;
-                  end else a <= 0;
+                  if (branch_op == 3'b100) branch <= 1;
+                  else branch <= 0;
                 end
                 3'b110: begin // branch if less than (unsigned)
-                  if (branch_op == 3'b101) begin
-                    a <= 1;
-                  end else a <= 0;
+                  if (branch_op == 3'b101) branch <= 1;
+                  else branch <= 0;
                 end
                 3'b111: begin // branch if greater/equal (unsigned)
-                  if (branch_op == 3'b110) begin
-                    a <= 1;
-                  end else a <= 0;
+                  if (branch_op == 3'b110) branch <= 1;
+                  else branch <= 0;
                 end
               default: begin
                  
