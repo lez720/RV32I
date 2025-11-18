@@ -79,7 +79,7 @@ module RV32I_top_level #(
     always @(posedge clk ) begin
         case (imm_en)
             2'b01 : imm_out <= inst_data[31:20];
-            2'b10 : begi
+            2'b10 : begin
                 imm_out[12] <= inst_data[31];
                 imm_out[10:5] <= inst_data[30:25];
                 imm_out[4:1] <= inst_data[11:8];

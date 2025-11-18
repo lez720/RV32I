@@ -7,7 +7,7 @@ module ctrl_unit #(
     input   [WIDTH-29:0]  func3, 
     input   [WIDTH-26:0]  func7,
 
-    input   [1:0] branch_op,
+    input   [2:0] branch_op,
     input                 alu_valid,
     
     output  reg [WIDTH-27:0]    alu_op,
@@ -25,6 +25,7 @@ module ctrl_unit #(
     output  reg           alu_en,
     output  reg           reg_read_en
 );
+
     localparam IF = 5'b00001;
     localparam ID = 5'b00010;
     localparam EX = 5'b00100;
@@ -66,7 +67,9 @@ module ctrl_unit #(
               port_B_sel <= 0;
               reg_read_en <= 1;
 
-              func3_R (func3, alu_op); 
+              func3_R (func3, func7, alu_op);
+
+              state <= EX;
             end
 
             // I-type
@@ -78,15 +81,21 @@ module ctrl_unit #(
               imm_en <= 2'b01;
               reg_read_en <= 1;
 
-              func3_I (func3, alu_op);
+              func3_I_A (func3, func7, alu_op);
+
+              state <= EX;
             end
             7'b0000011 : begin
               inst_type <= I_type;
 
+	            func3_I_S (func3, alu_op);
+
+              state <= EX;
             end
             7'b1100111 : begin // jump and link register
               inst_type <= I_type;
 
+              state <= EX;
             end
 
             // S-type
@@ -100,6 +109,8 @@ module ctrl_unit #(
               port_B_sel <= 0;
 
               func3_S (func3, alu_op);
+
+              state <= EX;
             end
 
             // B-type
@@ -111,15 +122,24 @@ module ctrl_unit #(
               port_A_sel <= 2'b10;
               port_B_sel <= 1;
 
-              //func3_B ();
+              if (branch) begin 
+                alu_operation <= 5'b00000;
+
+                state <= EX;
+              end
+              else state <= IF;
             end
 
             // U-type
             7'b0010111 : begin
               inst_type <= U_type;
+
+              state <= EX;
             end
             7'b0110111 : begin
               inst_type <= U_type;
+
+              state <= EX;
             end
 
             // J-type
@@ -131,6 +151,8 @@ module ctrl_unit #(
               imm_en <= 2'b11;
 
               alu_op <= 5'b00000;
+
+              state <= EX;
             end
         endcase
       end else if (state == EX) begin
@@ -174,13 +196,12 @@ module ctrl_unit #(
       end
     end
 
-
-
 //======================================================
-//
+
+
     task func3_R(
-      input [2:0] func_3,
-      input [6:0] func_7
+      input [WIDTH-29:0] func_3,
+      input [6:0] func_7,
 
       output [WIDTH-27:0] alu_operation
     );
@@ -200,10 +221,10 @@ module ctrl_unit #(
                   alu_operation <= 5'b01110; 
                 end
                 3'b010: begin // signed comparison
-                  alu_operation <= 5'b;
+                  //alu_operation <= 5'b;
                 end
                 3'b011: begin // unsigned comparison
-                  alu_operation <= 5'b;
+                  //alu_operation <= 5'b;
                 end
                 3'b100: begin // bitwise XOR
                   alu_operation <= 5'b01101;
@@ -229,7 +250,7 @@ module ctrl_unit #(
     endtask
 
     task func3_I_A(
-      input [2:0] func_3,
+      input [WIDTH-29:0] func_3,
       input [6:0] func_7,
 
       output [WIDTH-27:0] alu_operation
@@ -269,14 +290,13 @@ module ctrl_unit #(
                 end
               default: begin
                 
-
               end
               endcase
     end
     endtask
 
-    task func3_I_A(
-      input [2:0] func_3,
+    task func3_I_S(
+      input [WIDTH-29:0] func_3,
 
       output [WIDTH-27:0] alu_operation
     );
@@ -299,7 +319,6 @@ module ctrl_unit #(
                 end
               default: begin
                 
-
               end
               endcase
     end
@@ -307,7 +326,7 @@ module ctrl_unit #(
 
 
     task func3_S(
-      input [2:0] func_3,
+      input [WIDTH-29:0] func_3,
 
       output [WIDTH-27:0] alu_operation
     );
@@ -324,7 +343,6 @@ module ctrl_unit #(
                 end
               default: begin
                 
-
               end
               endcase
     end
@@ -333,31 +351,42 @@ module ctrl_unit #(
     task func3_B(
       input [2:0] func_3,
 
-      output a, b, c, d, e
+      output a
     );
     begin
         case (func_3)
                 3'b000: begin // branch if equal
-                  
+                  if (branch_op == 3'b001) begin
+                    a <= 1;
+                  end else a <= 0;
                 end
                 3'b001: begin // branch if not equal
-                  
+                  if (branch_op == 3'b010) begin
+                    a <= 1;
+                  end else a <= 0;
                 end
                 3'b100: begin // branch if less than (signed)
-                  
+                  if (branch_op == 3'b011) begin
+                    a <= 1;
+                  end else a <= 0;
                 end
                 3'b101: begin // branch if greater/equal (signed)
-                  
+                  if (branch_op == 3'b100) begin
+                    a <= 1;
+                  end else a <= 0;
                 end
                 3'b110: begin // branch if less than (unsigned)
-                  
+                  if (branch_op == 3'b101) begin
+                    a <= 1;
+                  end else a <= 0;
                 end
                 3'b111: begin // branch if greater/equal (unsigned)
-                  
+                  if (branch_op == 3'b110) begin
+                    a <= 1;
+                  end else a <= 0;
                 end
               default: begin
-                
-
+                 
               end
               endcase
     end

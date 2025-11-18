@@ -49,6 +49,8 @@ module RV32I_top_level #(
     wire            alu_en;
     wire    [WIDTH-27:0]    alu_op;
 
+    wire    [1:0]   branch_op;
+
     // control unit
     ctrl_unit CU_inst (
         .clk(clk), .rst(rst), .opcode(inst_data[WIDTH-25:0]), .DM_write_en(DM_write_en),
@@ -77,9 +79,12 @@ module RV32I_top_level #(
     always @(posedge clk ) begin
         case (imm_en)
             2'b01 : imm_out <= inst_data[31:20];
-            2'b10 : begin
-                imm_out[11:5] <= inst_data[31:25];
-                imm_out[4:0] <= inst_data[24:20];
+            2'b10 : begi
+                imm_out[12] <= inst_data[31];
+                imm_out[10:5] <= inst_data[30:25];
+                imm_out[4:1] <= inst_data[11:8];
+                imm_out[11] <= inst_data[7];
+                imm_out[0] <= 0;
             end
             2'b11 : begin 
                 imm_out <= inst_data [31:12];
@@ -117,8 +122,6 @@ module RV32I_top_level #(
         .port_A(port_A_out), .port_B(port_B_out), .operation(alu_op),
         .data_out(alu_out),. valid(alu_valid)
     );
-
-    wire    [1:0]   branch_op;
 
     // branch unit
     branch_unit BU_inst (
