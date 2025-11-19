@@ -15,7 +15,7 @@ module ctrl_unit #(
 
     output  reg           DM_write_en,
     output  reg [1:0]     port_A_sel,
-    output  reg [1:0]     ort_B_sel,
+    output  reg [1:0]     port_B_sel,
     output  reg [1:0]     write_MUX_sel,
     output  reg           PC_MUX_sel,
     output  reg [1:0]     imm_en,
@@ -45,6 +45,8 @@ module ctrl_unit #(
 
     reg [5:0] inst_type;
 
+    reg branch;
+
     always @(posedge clk ) begin
       if (rst || state == IF) begin
         port_A_sel <= 2'b00;
@@ -57,6 +59,7 @@ module ctrl_unit #(
         alu_en <= 0;
         branch_en <= 0;
         load_store_op <= 0;
+        branch <= 0;
 
         state <= ID;
 
@@ -132,8 +135,10 @@ module ctrl_unit #(
               port_A_sel <= 2'b10;
               port_B_sel <= 1;
 
+	      func3_B(func3, branch);
+
               if (branch) begin 
-                alu_operation <= 5'b00001;
+                alu_op <= 5'b00001;
 
                 state <= EX;
               end
