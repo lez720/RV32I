@@ -3,7 +3,8 @@ module RV32I_top_level #(
         WIDTH = 32
 ) (
     input               clk, rst,
-    input   [WIDTH-1:0] data_in,
+    input               inst_store,
+    input   [WIDTH-1:0] inst_in,
     output  [WIDTH-1:0] data_out
 );
 
@@ -34,7 +35,8 @@ module RV32I_top_level #(
     wire [WIDTH-1:0]    inst_data;
 
     inst_mem IM_inst (
-        .addr(prog_ctr), .data_out(inst_data)
+        .clk(clk), .rst(rst), . inst_store(inst_store),
+        .addr(prog_ctr), .data_in(inst_in), .data_out(inst_data)
         );
 
 // decode
