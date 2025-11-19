@@ -4,7 +4,7 @@ module inst_mem #(
             DEPTH = 32
 ) (
     input               clk, rst, inst_store,
-    input   [WIDTH+24:0] addr, data_in;
+    input   [WIDTH+24:0] addr, data_in,
     
     output  [WIDTH+24:0] data_out
 );
