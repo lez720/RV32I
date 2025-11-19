@@ -53,6 +53,9 @@ module RV32I_top_level #(
     wire    [2:0]   branch_op;
     wire    [2:0]   load_store_op;
 
+    wire DM_write;
+    wire DM_read;
+
     // control unit
     ctrl_unit CU_inst (
         .clk(clk), .rst(rst), .opcode(inst_data[WIDTH-25:0]), .DM_write_en(DM_write),
@@ -172,8 +175,8 @@ module RV32I_top_level #(
     end
 
     data_mem DM_inst (
-        .clk(clk), .rst(rst), .write_en(DM_write_en),
-        .read_en(DM_read_en), .data_in(DM_data_in), .addr(alu_out),
+        .clk(clk), .rst(rst), .write_en(DM_write),
+        .read_en(DM_read), .data_in(DM_data_in), .addr(alu_out),
         .data_out(DM_data_out)
     );
 
