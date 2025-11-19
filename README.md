@@ -7,9 +7,11 @@ This particular RV32I design was implemented with a 5-stage pipelined process:
 ## Block Diagram
 ![](images/block_diagram.png)
 
-green - control signals
+|  Wire Color  |  Definition |
+|--------------|-------------|
+| Green | Control Signals |
+| Blue | Data Bus/Interconnects |
 
-blue - data
 
 ## Instruction Types
 
