@@ -7,7 +7,7 @@ This particular RV32I design was implemented with a 5-stage pipelined process:
 ## Block Diagram
 ![](images/block_diagram.png)
 
-green - control signals
+green - control signals\n
 blue - data
 
 ## Instruction Types
