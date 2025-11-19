@@ -213,47 +213,47 @@ module ctrl_unit #(
       input [WIDTH-29:0] func_3,
       input [6:0] func_7,
 
-      output [WIDTH-27:0] alu_operation
+      output [WIDTH-27:0] operation
     );
     begin
         case (func_3)
                 3'b000: begin
                   case (func_7)
                     7'b0000000: begin // addition
-                      alu_operation <= 5'b00001;
+                      operation <= 5'b00001;
                     end
                     7'b0100000: begin // subtraction
-                      alu_operation <= 5'b00011;
+                      operation <= 5'b00011;
                     end
                   endcase 
                 end
                 3'b001: begin // shift left logical
-                  alu_operation <= 5'b01110; 
+                  operation <= 5'b01110; 
                 end
                 3'b010: begin // signed comparison
-                  //alu_operation <= 5'b;
+                  //operation <= 5'b;
                 end
                 3'b011: begin // unsigned comparison
-                  //alu_operation <= 5'b;
+                  //operation <= 5'b;
                 end
                 3'b100: begin // bitwise XOR
-                  alu_operation <= 5'b01101;
+                  operation <= 5'b01101;
                 end
                 3'b101: begin
                   case (func_7)
                     7'b0000000: begin // logical shift right
-                      alu_operation <= 5'b01111;
+                      operation <= 5'b01111;
                     end
                     7'b0100000: begin
-                      alu_operation <= 5'b10000; // arithmetic right shift
+                      operation <= 5'b10000; // arithmetic right shift
                     end
                   endcase 
                 end
                 3'b110: begin // bitwise OR
-                  alu_operation <= 5'b01100;
+                  operation <= 5'b01100;
                 end
                 3'b111: begin // bitwise AND
-                  alu_operation <= 5'b01010;
+                  operation <= 5'b01010;
                 end
               endcase
     end
@@ -263,12 +263,12 @@ module ctrl_unit #(
       input [WIDTH-29:0] func_3,
       input [6:0] func_7,
 
-      output [WIDTH-27:0] alu_operation
+      output [WIDTH-27:0] operation
     );
     begin
         case (func_3)
                 3'b000: begin // add imm
-                  alu_operation <= 5'b00001; 
+                  operation <= 5'b00001; 
                 end
                 3'b001: begin // shift left logical
                   
@@ -280,7 +280,7 @@ module ctrl_unit #(
                   
                 end
                 3'b100: begin // bitwise XOR with imm
-                  alu_operation <= 5'b01101;
+                  operation <= 5'b01101;
                 end
                 3'b101: begin
                   case (func_7)
@@ -293,10 +293,10 @@ module ctrl_unit #(
                   endcase
                 end
                 3'b110: begin // bitwise OR with imm
-                  alu_operation <= 5'b01100;
+                  operation <= 5'b01100;
                 end
                 3'b111: begin // bitwise AND with imm
-                  alu_operation <= 5'b01010;
+                  operation <= 5'b01010;
                 end
               default: begin
                 
