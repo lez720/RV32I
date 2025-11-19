@@ -8,7 +8,7 @@ module data_mem #(
     input   [WIDTH-1:0] data_in,
     input   [WIDTH-1:0] addr,
     
-    output  [WIDTH-1:0] data_out
+    output [WIDTH-1:0] data_out
 );
 
 reg [WIDTH-1:0] data_mem_block  [DEPTH-1:0];
