@@ -6,17 +6,19 @@ module reg_file #(
     input               clk, rst,
     input               write_en, read_en,
     input   [WIDTH-1:0] data_in,
-    input   [WIDTH-1:0] write_addr, read_addr_1, read_addr_2,
+    input   [4:0] write_addr, read_addr_1, read_addr_2,
     
     output  [WIDTH-1:0] data_out_1, data_out_2
 );
 
 reg [WIDTH-1:0] reg_file_block  [DEPTH-1:0];
 
+initial reg_file_block[0] = 32'h0; // x0 is zero constant
+
     always @(posedge clk ) begin
         if (rst) begin
             reg_file_block[write_addr] <= reg_file_block[write_addr];
-        end else if (read_en) begin
+        end else if (write_en) begin
             reg_file_block[write_addr] <= data_in;
         end
     end
