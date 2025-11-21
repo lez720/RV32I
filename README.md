@@ -20,7 +20,7 @@ This particular RV32I design was implemented with a 5-stage pipelined process:
 | J-Type | For unconditional jumps           |
 
 # RTL Design & Synthesis
-For the synthesis, the design uses the Sky130 PDK, specifically — 'sky130_fd_sc_hd__tt_100C_1v80' library.
+For the synthesis, the design uses the Sky130 PDK, specifically — `sky130_fd_sc_hd__tt_100C_1v80` library.
 
 ## Used Tools (EDA/IDEs)
 - Neovim (RTL Design)
