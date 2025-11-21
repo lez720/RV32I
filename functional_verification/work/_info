@@ -10,164 +10,234 @@ z2
 cModel Technology
 d/home/lez/intelFPGA/20.1/modelsim_ase/bin
 valu
-!s110 1763511675
+Z0 !s110 1763688184
 !i10b 1
-!s100 n=l]<C[^U^7>EnOQIY2Fn0
-Z0 !s11b Dg1SIo80bB@j0V0VzS_@n1
-IQJQZIVAAl=HA1Yn;=L=df0
-Z1 VDg1SIo80bB@j0V0VzS_@n1
-Z2 d/home/lez/Documents/Projects/Architecture/RV32I/functional_verification
-w1763510982
+!s100 VR]_Ql3gKUKEGhc7gg;5`2
+Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
+IaJ<IENN1@97WW>DHooU>`3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+Z3 d/home/lez/Documents/Projects/Architecture/RV32I/functional_verification
+w1763564719
 8/home/lez/Documents/Projects/Architecture/RV32I/src/alu.v
 F/home/lez/Documents/Projects/Architecture/RV32I/src/alu.v
-!i122 29
+!i122 900
 L0 1 103
-Z3 OV;L;2020.1;71
+Z4 OV;L;2020.1;71
 r1
 !s85 0
 31
-!s108 1763511675.000000
+Z5 !s108 1763688184.000000
 !s107 /home/lez/Documents/Projects/Architecture/RV32I/src/alu.v|
 !s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/alu.v|
 !i113 1
-Z4 o-work work
-Z5 tCvgOpt 0
+Z6 o-work work
+Z7 tCvgOpt 0
 vbranch_unit
-Z6 !s110 1762547322
+R0
 !i10b 1
 !s100 :ae_c`1Ck_TIRf3WUO<5o2
-R0
-IDWi[12XUNh3RZZaf`4@FB3
 R1
+IDWi[12XUNh3RZZaf`4@FB3
 R2
-Z7 w1762194930
+R3
+w1763649293
 8/home/lez/Documents/Projects/Architecture/RV32I/src/branch_unit.v
 F/home/lez/Documents/Projects/Architecture/RV32I/src/branch_unit.v
-!i122 22
+!i122 901
 L0 1 31
-R3
+R4
 r1
 !s85 0
 31
-Z8 !s108 1762547322.000000
+R5
 !s107 /home/lez/Documents/Projects/Architecture/RV32I/src/branch_unit.v|
 !s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/branch_unit.v|
 !i113 1
-R4
-R5
+R6
+R7
 vctrl_unit
-!s110 1763511669
-!i10b 1
-!s100 _oZllEO>QA`@kQ_onY[an0
 R0
-IckePo8KS9Yb>=:z7>TF7a3
+!i10b 1
+!s100 _H<TKaFKhIWeXNKzoeL0F1
 R1
+IACebIEdmo=T=_1n>YjKJa2
 R2
-w1763511666
+R3
+w1763687472
 8/home/lez/Documents/Projects/Architecture/RV32I/src/ctrl_unit.v
 F/home/lez/Documents/Projects/Architecture/RV32I/src/ctrl_unit.v
-!i122 28
+!i122 902
 L0 1 403
-R3
+R4
 r1
 !s85 0
 31
-!s108 1763511669.000000
+R5
 !s107 /home/lez/Documents/Projects/Architecture/RV32I/src/ctrl_unit.v|
 !s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/ctrl_unit.v|
 !i113 1
-R4
-R5
+R6
+R7
 vdata_mem
-Z9 !s110 1762547327
+R0
 !i10b 1
 !s100 Uom4d8=2VI]Agn9zfAonJ0
-R0
-IP1e8]a`_2Fcm2fICJDRF02
 R1
+IP1e8]a`_2Fcm2fICJDRF02
 R2
-R7
+R3
+w1763519988
 8/home/lez/Documents/Projects/Architecture/RV32I/src/data_mem.v
 F/home/lez/Documents/Projects/Architecture/RV32I/src/data_mem.v
-!i122 23
+!i122 897
 L0 1 25
-R3
+R4
 r1
 !s85 0
 31
-Z10 !s108 1762547327.000000
+R5
 !s107 /home/lez/Documents/Projects/Architecture/RV32I/src/data_mem.v|
 !s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/data_mem.v|
 !i113 1
-R4
-R5
-vinst_mem
-R9
-!i10b 1
-!s100 cMElnRH^8FQRDRS_S`2YD2
-R0
-I:1OaUUcO73S?7of6V38J<1
-R1
-R2
+R6
 R7
-8/home/lez/Documents/Projects/Architecture/RV32I/src/inst_mem.v
-F/home/lez/Documents/Projects/Architecture/RV32I/src/inst_mem.v
-!i122 24
-L0 1 19
+vimm_unit
+R0
+!i10b 1
+!s100 6>3?=o<<k0bk5YW:Mo4OB2
+R1
+IU3=Z_NZBRRbSCI6DSoYaH3
+R2
 R3
+w1763685497
+8/home/lez/Documents/Projects/Architecture/RV32I/src/imm_unit.v
+F/home/lez/Documents/Projects/Architecture/RV32I/src/imm_unit.v
+!i122 904
+Z8 L0 1 28
+R4
 r1
 !s85 0
 31
-R10
+R5
+!s107 /home/lez/Documents/Projects/Architecture/RV32I/src/imm_unit.v|
+!s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/imm_unit.v|
+!i113 1
+R6
+R7
+vinst_mem
+R0
+!i10b 1
+!s100 M40zD5hOWadlE`WDljMDf1
+R1
+IPHgd64CKkmjK4[Kji6a643
+R2
+R3
+w1763688180
+8/home/lez/Documents/Projects/Architecture/RV32I/src/inst_mem.v
+F/home/lez/Documents/Projects/Architecture/RV32I/src/inst_mem.v
+!i122 898
+L0 1 99
+R4
+r1
+!s85 0
+31
+R5
 !s107 /home/lez/Documents/Projects/Architecture/RV32I/src/inst_mem.v|
 !s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/inst_mem.v|
 !i113 1
-R4
-R5
-vreg_file
 R6
-!i10b 1
-!s100 M9z1FKnTUf5[zdboh3L4D1
-R0
-I7EA0W=Fmd2KhG^81kZZQ[1
-R1
-R2
 R7
-8/home/lez/Documents/Projects/Architecture/RV32I/src/reg_file.v
-F/home/lez/Documents/Projects/Architecture/RV32I/src/reg_file.v
-!i122 21
-L0 1 27
+vprog_ctr
+R0
+!i10b 1
+!s100 ViJ>J29k9Jf@bNh?5oldb0
+R1
+I_1o:C;4eQoHK013ZK<FE:2
+R2
 R3
+w1763683743
+8/home/lez/Documents/Projects/Architecture/RV32I/src/prog_ctr.v
+F/home/lez/Documents/Projects/Architecture/RV32I/src/prog_ctr.v
+!i122 903
+R8
+R4
 r1
 !s85 0
 31
-R8
+R5
+!s107 /home/lez/Documents/Projects/Architecture/RV32I/src/prog_ctr.v|
+!s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/prog_ctr.v|
+!i113 1
+R6
+R7
+vreg_file
+R0
+!i10b 1
+!s100 z<?m;i`9XFei?VXZAAMJI0
+R1
+ITbPY]gf2SBohQW9PVE7gN1
+R2
+R3
+w1763687668
+8/home/lez/Documents/Projects/Architecture/RV32I/src/reg_file.v
+F/home/lez/Documents/Projects/Architecture/RV32I/src/reg_file.v
+!i122 899
+L0 1 29
+R4
+r1
+!s85 0
+31
+R5
 !s107 /home/lez/Documents/Projects/Architecture/RV32I/src/reg_file.v|
 !s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/reg_file.v|
 !i113 1
-R4
-R5
-vRV32I_top_level
-!s110 1763513687
-!i10b 1
-!s100 `;QFo35kSDjeoAc:5:2>:3
+R6
+R7
+vRV32I_TB
 R0
-I;XQC7Y_X>m;cchPlhGJ7B2
+!i10b 1
+!s100 khRPSA9DUb6Bkf9MnzjVV1
 R1
+I1o=^mV_n2?T]mKoENZzZ52
 R2
-w1763513685
-8/home/lez/Documents/Projects/Architecture/RV32I/src/RV32I_top_level.v
-F/home/lez/Documents/Projects/Architecture/RV32I/src/RV32I_top_level.v
-!i122 30
-L0 1 194
 R3
+w1763685885
+8/home/lez/Documents/Projects/Architecture/RV32I/functional_verification/RV32I_TB.v
+F/home/lez/Documents/Projects/Architecture/RV32I/functional_verification/RV32I_TB.v
+!i122 895
+L0 1 17
+R4
 r1
 !s85 0
 31
-!s108 1763513687.000000
+R5
+!s107 /home/lez/Documents/Projects/Architecture/RV32I/functional_verification/RV32I_TB.v|
+!s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/functional_verification/RV32I_TB.v|
+!i113 1
+R6
+R7
+n@r@v32@i_@t@b
+vRV32I_top_level
+R0
+!i10b 1
+!s100 =81W[hEfCL?4g]aUGS8Qj2
+R1
+IRe3ESJi<MU`Wo`PLoM;N10
+R2
+R3
+w1763688098
+8/home/lez/Documents/Projects/Architecture/RV32I/src/RV32I_top_level.v
+F/home/lez/Documents/Projects/Architecture/RV32I/src/RV32I_top_level.v
+!i122 896
+L0 1 194
+R4
+r1
+!s85 0
+31
+R5
 !s107 /home/lez/Documents/Projects/Architecture/RV32I/src/RV32I_top_level.v|
 !s90 -reportprogress|300|-work|work|-stats=none|/home/lez/Documents/Projects/Architecture/RV32I/src/RV32I_top_level.v|
 !i113 1
-R4
-R5
+R6
+R7
 n@r@v32@i_top_level
