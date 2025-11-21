@@ -23,7 +23,7 @@ This particular RV32I design was implemented with a 5-stage pipelined process:
 
 
 ## RTL Design & Synthesis
-An FSM-based control logic was implemented to pipline the 5-stage process of the ISA.
+An FSM-based control logic was implemented to manage the execution pipeline and dataflow of the ISA.
 
 For the synthesis, the design uses the `sky130_fd_sc_hd__tt_100C_1v80` library. A high-density standard cell library characterized at the typical-typical process corner, 1.8V core voltage, and 100°C operating temperature.
 
