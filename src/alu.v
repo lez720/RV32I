@@ -13,7 +13,7 @@ module alu #(
 
   always @(posedge clk) begin
     if (rst) begin
-      data_out <= 32'bx;
+      data_out <= 32'b0;
       valid <= 0;
     end
     else if (en) begin

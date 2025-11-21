@@ -3,19 +3,16 @@ module ctrl_unit #(
         WIDTH = 32
 ) (
     input   clk, rst,
-    input   [WIDTH-26:0]  opcode,
-    input   [WIDTH-29:0]  func3, 
+    input   [6:0]  opcode,
+    input   [2:0]  func3, 
     input   [WIDTH-26:0]  func7,
-
-    input   [2:0]         branch_op,
+    input   [1:0]         branch_op,
     input                 alu_valid,
     
     output  reg [WIDTH-27:0]    alu_op,
-
-
     output  reg           DM_write_en,
     output  reg [1:0]     port_A_sel,
-    output  reg [1:0]     port_B_sel,
+    output  reg           port_B_sel,
     output  reg [1:0]     write_MUX_sel,
     output  reg           PC_MUX_sel,
     output  reg [1:0]     imm_en,
@@ -28,14 +25,24 @@ module ctrl_unit #(
     output  reg           DM_read_en
 );
 
+    reg [5:0] inst_type;
+    reg [4:0] state;
+    reg       branch;
+
+// process stages
     localparam IF = 5'b00001;
     localparam ID = 5'b00010;
     localparam EX = 5'b00100;
     localparam MEM = 5'b01000;  
     localparam WB = 5'b10000;
+    
+    // for test 
+    initial begin
+      state = IF;
+      inst_type = 0;
+    end
 
-    reg [4:0] state;
-
+// instruction type
     localparam R_type = 6'b000001;
     localparam I_type = 6'b000010;
     localparam S_type = 6'b000100;
@@ -43,12 +50,9 @@ module ctrl_unit #(
     localparam U_type = 6'b010000;
     localparam J_type = 6'b100000;
 
-    reg [5:0] inst_type;
-
-    reg branch;
 
     always @(posedge clk ) begin
-      if (rst || state == IF) begin
+      if (rst) begin
         port_A_sel <= 2'b00;
         port_B_sel <= 0;
         DM_write_en <= 0;
@@ -60,11 +64,32 @@ module ctrl_unit #(
         branch_en <= 0;
         load_store_op <= 0;
         branch <= 0;
+        PC_MUX_sel <= 0;
+        alu_op <= 0;
 
+	PC_stall <= 1;
+
+      end else if (state == IF && ~rst) begin
+        port_A_sel <= 2'b00;
+        port_B_sel <= 0;
+        DM_write_en <= 0;
+        write_MUX_sel <= 0;
+        imm_en <= 0;
+        reg_read_en <= 0;
+        reg_write_en <= 0;
+        alu_en <= 0;
+        branch_en <= 0;
+        load_store_op <= 0;
+        branch <= 0;
+        PC_MUX_sel <= 0;
+        alu_op <= 0;
+
+        PC_stall <= 1;
+        
         state <= ID;
-
-      end else if (state == ID) begin
-        case (opcode)
+      end else if (state == ID && ~rst) begin
+        PC_stall <= 1;
+        case (opcode)																													
             // R-type
             7'b0110011 : begin
               inst_type <= R_type;
@@ -73,7 +98,49 @@ module ctrl_unit #(
               port_B_sel <= 0;
               reg_read_en <= 1;
 
-              func3_R (func3, func7, alu_op);
+              // func3_R (func3, func7, alu_op);
+
+              // test
+                case (func3)
+                3'b000: begin
+                  case (func7)
+                    7'b0000000: begin // addition
+                      alu_op <= 5'b00001;
+                    end
+                    7'b0100000: begin // subtraction
+                      alu_op <= 5'b00011;
+                    end
+                  endcase 
+                end
+                3'b001: begin // shift left logical
+                  alu_op <= 5'b01110; 
+                end
+                3'b010: begin // signed comparison
+                  //operation <= 5'b;
+                end
+                3'b011: begin // unsigned comparison
+                  //operation <= 5'b;
+                end
+                3'b100: begin // bitwise XOR
+                  alu_op <= 5'b01101;
+                end
+                3'b101: begin
+                  case (func7)
+                    7'b0000000: begin // logical shift right
+                      alu_op <= 5'b01111;
+                    end
+                    7'b0100000: begin
+                      alu_op <= 5'b10000; // arithmetic right shift
+                    end
+                  endcase 
+                end
+                3'b110: begin // bitwise OR
+                  alu_op <= 5'b01100;
+                end
+                3'b111: begin // bitwise AND
+                  alu_op <= 5'b01010;
+                end
+              endcase
 
               state <= EX;
             end
@@ -87,7 +154,46 @@ module ctrl_unit #(
               port_A_sel <= 2'b01;
               port_B_sel <= 1;
 
-              func3_I_A (func3, func7, alu_op);
+              //func3_I_A (func3, func7, alu_op);
+
+              // test
+              case (func3)
+                3'b000: begin // add imm
+                  alu_op <= 5'b00001; 
+                end
+                3'b001: begin // shift left logical
+                  // test
+                  alu_op <= 5'b00001; 
+                end
+                3'b010: begin // set if less than (signed)
+                  
+                end
+                3'b011: begin // set if less than (unsigned)
+                  
+                end
+                3'b100: begin // bitwise XOR with imm
+                  alu_op <= 5'b01101;
+                end
+                3'b101: begin
+                  case (func7)
+                     7'b0000000: begin // shift right logical
+                      
+                     end
+                     7'b0100000 : begin // shift right arithmetic 
+
+                     end
+                  endcase
+                end
+                3'b110: begin // bitwise OR with imm
+                  alu_op <= 5'b01100;
+                end
+                3'b111: begin // bitwise AND with imm
+                  alu_op <= 5'b01010;
+                end
+              default: begin
+                
+              end
+              endcase
 
               state <= EX;
             end
@@ -99,7 +205,27 @@ module ctrl_unit #(
               port_A_sel <= 2'b00;
               port_B_sel <= 1;
 
-	            func3_I_L (func3, load_store_op);
+	      //func3_I_L (func3, load_store_op);
+
+	      // test
+                case (func3)
+                3'b000: begin // load byte (sign-extend)
+                  load_store_op <= 3'b100;
+                end
+                3'b001: begin // load half-word (sign-extend)
+                  load_store_op <= 3'b101;
+                end
+                3'b010: begin // load word
+                  load_store_op <= 3'b000;
+                end
+                3'b100: begin // load byte (zero-extend)
+                  load_store_op <= 3'b110;
+                end
+                3'b101: begin // load half-word (zero-extend)
+                  load_store_op <= 3'b111;
+                end
+              endcase
+
               alu_op <= 5'b11000;
 
               state <= EX;
@@ -121,7 +247,21 @@ module ctrl_unit #(
               port_A_sel <= 2'b11;
               port_B_sel <= 0;
 
-              func3_S (func3, load_store_op);
+              // (func3, load_store_op);
+              // test
+              case (func3)
+                3'b000: begin // store byte (8-bit)
+                  load_store_op <= 3'b001;
+                end
+                3'b001: begin // store half-word (16-bit)
+                  load_store_op <= 3'b010;
+                end
+                3'b010: begin // store word (32-bit)
+                  load_store_op <= 3'b011;
+                end
+              endcase
+	
+              alu_op <= 5'b11000;
 
               state <= EX;
             end
@@ -135,15 +275,60 @@ module ctrl_unit #(
               port_A_sel <= 2'b10;
               port_B_sel <= 1;
 
-	      func3_B(func3, branch);
+	      //func3_B(func3, branch);
+              //test
 
+              case (func3)
+                3'b000: begin // branch if equal
+                  if (branch_op == 3'b001) begin
+			alu_op <= 5'b00001;
+			state <= EX;
+		  end
+                  else state <= IF;
+                end
+                3'b001: begin // branch if not equal
+                  if (branch_op == 3'b010) begin
+			alu_op <= 5'b00001;
+			state <= EX;
+		  end
+                  else state <= IF;
+                end
+                3'b100: begin // branch if less than (signed)
+                  if (branch_op == 3'b011) begin
+			alu_op <= 5'b00001;
+			state <= EX;
+		  end
+                  else state <= IF;
+                end
+                3'b101: begin // branch if greater/equal (signed)
+                  if (branch_op == 3'b100) alu_op <= 5'b00001;
+                  else branch <= 0;
+                end
+                3'b110: begin // branch if less than (unsigned)
+                  if (branch_op == 3'b101) begin
+			alu_op <= 5'b00001;
+			state <= EX;
+		  end
+                  else state <= IF;
+                end
+                3'b111: begin // branch if greater/equal (unsigned)
+                  if (branch_op == 3'b110) begin
+			alu_op <= 5'b00001;
+			state <= EX;
+		  end
+                  else state <= IF;
+                end
+              endcase
+/*
               if (branch) begin 
-                alu_operation <= 5'b00001;
+                alu_op <= 5'b00001;
 
                 state <= EX;
               end
               else state <= IF;
-            end
+            
+*/
+	    end
 
             // U-type
             7'b0010111 : begin
@@ -170,7 +355,7 @@ module ctrl_unit #(
               state <= EX;
             end
         endcase
-      end else if (state == EX) begin
+      end else if (state == EX && ~rst) begin
         alu_en <= 1;
         if (alu_valid) begin
           alu_en <= 0;
@@ -188,12 +373,15 @@ module ctrl_unit #(
              end
              B_type: begin
                state <= IF;
+	       PC_stall <= 0;
              end
              U_type: begin
                state <= IF;
+		PC_stall <= 0;
              end
              J_type: begin
                state <= IF;
+		PC_stall <= 0;
              end
           default: begin
             state <= EX; 
@@ -202,202 +390,13 @@ module ctrl_unit #(
         end else begin 
           state <= EX;
         end
-      end else if (state == MEM) begin 
+      end else if (state == MEM && ~rst) begin 
         DM_write_en <= 1;
         state <= IF;
-      end else if (state == WB) begin
+	PC_stall <= 0;
+      end else if (state == WB && ~rst) begin
         reg_write_en <= 1;
         state <= IF;
+	PC_stall <= 0;
       end
     end
-
-//======================================================
-
-
-    task func3_R(
-      input [WIDTH-29:0] func_3,
-      input [6:0] func_7,
-
-      output [WIDTH-27:0] operation
-    );
-    begin
-        case (func_3)
-                3'b000: begin
-                  case (func_7)
-                    7'b0000000: begin // addition
-                      operation <= 5'b00001;
-                    end
-                    7'b0100000: begin // subtraction
-                      operation <= 5'b00011;
-                    end
-                  endcase 
-                end
-                3'b001: begin // shift left logical
-                  operation <= 5'b01110; 
-                end
-                3'b010: begin // signed comparison
-                  //operation <= 5'b;
-                end
-                3'b011: begin // unsigned comparison
-                  //operation <= 5'b;
-                end
-                3'b100: begin // bitwise XOR
-                  operation <= 5'b01101;
-                end
-                3'b101: begin
-                  case (func_7)
-                    7'b0000000: begin // logical shift right
-                      operation <= 5'b01111;
-                    end
-                    7'b0100000: begin
-                      operation <= 5'b10000; // arithmetic right shift
-                    end
-                  endcase 
-                end
-                3'b110: begin // bitwise OR
-                  operation <= 5'b01100;
-                end
-                3'b111: begin // bitwise AND
-                  operation <= 5'b01010;
-                end
-              endcase
-    end
-    endtask
-
-    task func3_I_A(
-      input [WIDTH-29:0] func_3,
-      input [6:0] func_7,
-
-      output [WIDTH-27:0] operation
-    );
-    begin
-        case (func_3)
-                3'b000: begin // add imm
-                  operation <= 5'b00001; 
-                end
-                3'b001: begin // shift left logical
-                  
-                end
-                3'b010: begin // set if less than (signed)
-                  
-                end
-                3'b011: begin // set if less than (unsigned)
-                  
-                end
-                3'b100: begin // bitwise XOR with imm
-                  operation <= 5'b01101;
-                end
-                3'b101: begin
-                  case (func_7)
-                     7'b0000000: begin // shift right logical
-                      
-                     end
-                     7'b0100000 : begin // shift right arithmetic 
-
-                     end
-                  endcase
-                end
-                3'b110: begin // bitwise OR with imm
-                  operation <= 5'b01100;
-                end
-                3'b111: begin // bitwise AND with imm
-                  operation <= 5'b01010;
-                end
-              default: begin
-                
-              end
-              endcase
-    end
-    endtask
-
-    task func3_I_L(
-      input [WIDTH-29:0] func_3,
-
-      output [WIDTH-27:0] operation
-    );
-    begin
-        case (func_3)
-                3'b000: begin // load byte (sign-extend)
-                  operation <= 3'b100;
-                end
-                3'b001: begin // load half-word (sign-extend)
-                  operation <= 3'b101;
-                end
-                3'b010: begin // load word
-                  operation <= 3'b000;
-                end
-                3'b100: begin // load byte (zero-extend)
-                  operation <= 3'b110;
-                end
-                3'b101: begin // load half-word (zero-extend)
-                  operation <= 3'b111;
-                end
-              default: begin
-                
-              end
-              endcase
-    end
-    endtask
-
-
-    task func3_S(
-      input [WIDTH-29:0] func_3,
-
-      output [WIDTH-30:0] operation
-    );
-    begin
-        case (func_3)
-                3'b000: begin // store byte (8-bit)
-                  operation <= 3'b001;
-                end
-                3'b001: begin // store half-word (16-bit)
-                  operation <= 3'b010;
-                end
-                3'b010: begin // store word (32-bit)
-                  operation <= 3'b011;
-                end
-              default: begin
-                
-              end
-              endcase
-    end
-    endtask
-
-    task func3_B(
-      input [2:0] func_3,
-
-      output branch
-    );
-    begin
-        case (func_3)
-                3'b000: begin // branch if equal
-                  if (branch_op == 3'b001) branch <= 1;
-                  else branch <= 0;
-                end
-                3'b001: begin // branch if not equal
-                  if (branch_op == 3'b010) branch <= 1;
-                  else branch <= 0;
-                end
-                3'b100: begin // branch if less than (signed)
-                  if (branch_op == 3'b011) branch <= 1;
-                  else branch <= 0;
-                end
-                3'b101: begin // branch if greater/equal (signed)
-                  if (branch_op == 3'b100) branch <= 1;
-                  else branch <= 0;
-                end
-                3'b110: begin // branch if less than (unsigned)
-                  if (branch_op == 3'b101) branch <= 1;
-                  else branch <= 0;
-                end
-                3'b111: begin // branch if greater/equal (unsigned)
-                  if (branch_op == 3'b110) branch <= 1;
-                  else branch <= 0;
-                end
-              default: begin
-                 
-              end
-              endcase
-    end
-    endtask
-endmodule

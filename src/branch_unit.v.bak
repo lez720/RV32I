@@ -7,14 +7,13 @@ module branch_unit #(
 
     output  reg [1:0]   branch
 );
-    // add comparator
     // add branch target adder (branch target = PC + imm)
     always @(posedge clk) begin
       if (rst) begin
         branch <= 2'b00;
       end
       else if (en) begin
-        if (data_in_1 = data_in_2) begin
+        if (data_in_1 == data_in_2) begin
           branch <= 2'b01;
         end
         else if (data_in_1 > data_in_2) begin

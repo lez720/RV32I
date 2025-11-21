@@ -13,8 +13,8 @@ module alu #(
 
   always @(posedge clk) begin
     if (rst) begin
-      data_out <= 32'bx;
-      alu_valid <= 0;
+      data_out <= 32'b0;
+      valid <= 0;
     end
     else if (en) begin
       case (operation)
@@ -65,16 +65,16 @@ module alu #(
         end
         5'b10000: begin // shift right arithmetic
           
-        end /*
+        end 
         5'b11000: begin
-          
+          data_out <= port_B; // immediate to data memory address
         end
         5'b11001: begin
           
         end
         5'b11010: begin
           
-        end
+        end /*
         5'b11011: begin
           
         end
@@ -91,12 +91,12 @@ module alu #(
           
         end */
       default: begin
-        data_out <= 32'b0;
+        // data_out <= 32'b0;
       end
       endcase
-      alu_valid <= 1;
+      valid <= 1;
     end else begin 
-      alu_valid <= 0;
+      valid <= 0;
     end
   end
 
