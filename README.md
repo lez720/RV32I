@@ -1,4 +1,6 @@
-# Instruction Set Architecture (ISA) Overview
+# Project Overview
+
+### RV32I ISA Overview
 RV32I is the base integer instruction set architecture for the 32-bit variant of the RISC-V ISA. It is the foundation for the RISC-V architecture, providing the minimal set of instructions required to build a processor capable of supporting modern operating systems.
 
 This particular RV32I design was implemented with a 5-stage pipelined process:
