@@ -7,7 +7,7 @@ RV32I is the base integer instruction set architecture for the 32-bit variant of
 |--------|------------|
 | R-Type | Register to register arithmetic/logical operations           |
 | I-Type | Arithmetic/logical, load, JAL operations with an immmediate value            |
-| S-Type | Store operations, writing data from a register to memory            |
+| S-Type | Register to memory store operations         |
 | B-Type | Conditional branch            |
 | U-Type | Load upper immediate (lui)            |
 | J-Type | Unconditional jumps           |
