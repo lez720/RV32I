@@ -25,7 +25,7 @@ This particular RV32I design was implemented with a 5-stage pipelined process:
 # RTL Design & Synthesis
 For the synthesis, the design uses the `sky130_fd_sc_hd__tt_100C_1v80` library. An open-source high-density standard cell library characterized at the typical-typical process corner, 1.8V core voltage, and 100°C operating temperature.
 
-## Used Tools (EDA/IDEs)
+## Tools
 - Neovim (RTL Design)
 - ModelSim (Functional Verification)
 - Yosys (Synthesis)
