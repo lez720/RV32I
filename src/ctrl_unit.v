@@ -2,27 +2,27 @@ module ctrl_unit #(
     parameter
         WIDTH = 32
 ) (
-    input   clk, rst,
-    input   [6:0]  opcode,
-    input   [2:0]  func3, 
-    input   [WIDTH-26:0]  func7,
-    input   [1:0]         branch_op,
-    input                 alu_valid,
+    input                     clk, rst,
+    input   [6:0]             opcode,
+    input   [2:0]             func3, 
+    input   [6:0]             func7,
+    input   [1:0]             branch_op,
+    input                     alu_valid,
     
-    output  reg [WIDTH-27:0]    alu_op,
-    output  reg           DM_write_en,
-    output  reg [1:0]     port_A_sel,
-    output  reg           port_B_sel,
-    output  reg [1:0]     write_MUX_sel,
-    output  reg           PC_MUX_sel,
-    output  reg [1:0]     imm_en,
-    output  reg           reg_write_en,
-    output  reg           branch_en,
-    output  reg           PC_stall,
-    output  reg           alu_en,
-    output  reg           reg_read_en,
-    output  reg [2:0]     load_store_op,
-    output  reg           DM_read_en
+    output  reg [4:0]         alu_op,
+    output  reg               DM_write_en,
+    output  reg [1:0]         port_A_sel,
+    output  reg               port_B_sel,
+    output  reg [1:0]         write_MUX_sel,
+    output  reg               PC_MUX_sel,
+    output  reg [1:0]         imm_en,
+    output  reg               reg_write_en,
+    output  reg               branch_en,
+    output  reg               PC_stall,
+    output  reg               alu_en,
+    output  reg               reg_read_en,
+    output  reg [2:0]         load_store_op,
+    output  reg               DM_read_en
 );
 
     reg [5:0] inst_type;
@@ -67,7 +67,7 @@ module ctrl_unit #(
         PC_MUX_sel <= 0;
         alu_op <= 0;
 
-	PC_stall <= 1;
+	      PC_stall <= 1;
 
       end else if (state == IF && ~rst) begin
         port_A_sel <= 2'b00;
@@ -87,19 +87,17 @@ module ctrl_unit #(
         PC_stall <= 1;
         
         state <= ID;
+
       end else if (state == ID && ~rst) begin
-        PC_stall <= 1;
         case (opcode)																													
             // R-type
             7'b0110011 : begin
               inst_type <= R_type;
-
               port_A_sel <= 2'b01;
               port_B_sel <= 0;
               reg_read_en <= 1;
 
               // func3_R (func3, func7, alu_op);
-
               // test
                 case (func3)
                 3'b000: begin
@@ -141,7 +139,6 @@ module ctrl_unit #(
                   alu_op <= 5'b01010;
                 end
               endcase
-
               state <= EX;
             end
 
@@ -150,12 +147,10 @@ module ctrl_unit #(
               inst_type <= I_type;
               imm_en <= 2'b01;
               reg_read_en <= 1;
-
               port_A_sel <= 2'b01;
               port_B_sel <= 1;
 
               //func3_I_A (func3, func7, alu_op);
-
               // test
               case (func3)
                 3'b000: begin // add imm
@@ -177,7 +172,7 @@ module ctrl_unit #(
                 3'b101: begin
                   case (func7)
                      7'b0000000: begin // shift right logical
-                      
+              
                      end
                      7'b0100000 : begin // shift right arithmetic 
 
@@ -190,24 +185,17 @@ module ctrl_unit #(
                 3'b111: begin // bitwise AND with imm
                   alu_op <= 5'b01010;
                 end
-              default: begin
-                
-              end
               endcase
-
               state <= EX;
             end
             7'b0000011 : begin // immediate load
               inst_type <= I_type;
-
               imm_en <= 2'b01;
-
               port_A_sel <= 2'b00;
               port_B_sel <= 1;
 
-	      //func3_I_L (func3, load_store_op);
-
-	      // test
+	              //func3_I_L (func3, load_store_op);
+	              // test
                 case (func3)
                 3'b000: begin // load byte (sign-extend)
                   load_store_op <= 3'b100;
@@ -225,14 +213,11 @@ module ctrl_unit #(
                   load_store_op <= 3'b111;
                 end
               endcase
-
               alu_op <= 5'b11000;
-
               state <= EX;
             end
             7'b1100111 : begin // jump and link register
               inst_type <= I_type;
-
               state <= EX;
             end
 
@@ -260,9 +245,7 @@ module ctrl_unit #(
                   load_store_op <= 3'b011;
                 end
               endcase
-	
               alu_op <= 5'b11000;
-
               state <= EX;
             end
 
@@ -275,29 +258,28 @@ module ctrl_unit #(
               port_A_sel <= 2'b10;
               port_B_sel <= 1;
 
-	      //func3_B(func3, branch);
+	            //func3_B(func3, branch);
               //test
-
               case (func3)
                 3'b000: begin // branch if equal
                   if (branch_op == 3'b001) begin
-			alu_op <= 5'b00001;
-			state <= EX;
-		  end
+			              alu_op <= 5'b00001;
+                    state <= EX;
+                  end
                   else state <= IF;
                 end
                 3'b001: begin // branch if not equal
                   if (branch_op == 3'b010) begin
-			alu_op <= 5'b00001;
-			state <= EX;
-		  end
+                    alu_op <= 5'b00001;
+                    state <= EX;
+                  end
                   else state <= IF;
                 end
                 3'b100: begin // branch if less than (signed)
                   if (branch_op == 3'b011) begin
-			alu_op <= 5'b00001;
-			state <= EX;
-		  end
+                    alu_op <= 5'b00001;
+                    state <= EX;
+                  end
                   else state <= IF;
                 end
                 3'b101: begin // branch if greater/equal (signed)
@@ -306,16 +288,16 @@ module ctrl_unit #(
                 end
                 3'b110: begin // branch if less than (unsigned)
                   if (branch_op == 3'b101) begin
-			alu_op <= 5'b00001;
-			state <= EX;
-		  end
+                    alu_op <= 5'b00001;
+                    state <= EX;
+                  end
                   else state <= IF;
                 end
                 3'b111: begin // branch if greater/equal (unsigned)
                   if (branch_op == 3'b110) begin
-			alu_op <= 5'b00001;
-			state <= EX;
-		  end
+                    alu_op <= 5'b00001;
+                    state <= EX;
+                  end
                   else state <= IF;
                 end
               endcase
@@ -373,15 +355,15 @@ module ctrl_unit #(
              end
              B_type: begin
                state <= IF;
-	       PC_stall <= 0;
+	              PC_stall <= 0;
              end
              U_type: begin
-               state <= IF;
-		PC_stall <= 0;
+                state <= IF;
+		            PC_stall <= 0;
              end
              J_type: begin
-               state <= IF;
-		PC_stall <= 0;
+                state <= IF;
+		            PC_stall <= 0;
              end
           default: begin
             state <= EX; 
@@ -393,11 +375,11 @@ module ctrl_unit #(
       end else if (state == MEM && ~rst) begin 
         DM_write_en <= 1;
         state <= IF;
-	PC_stall <= 0;
+	      PC_stall <= 0;
       end else if (state == WB && ~rst) begin
         reg_write_en <= 1;
         state <= IF;
-	PC_stall <= 0;
+	      PC_stall <= 0;
       end
     end
 endmodule

@@ -4,11 +4,10 @@ module alu #(
 ) (
     input                   clk, rst, en,
     input   [WIDTH-1:0]     port_A, port_B,
-    input   [WIDTH-27:0]    operation,
+    input   [WIDTH-28:0]    operation,
 
     output  reg  [WIDTH-1:0]     data_out,
-
-    output  reg             valid
+    output  reg                  valid
 );
 
   always @(posedge clk) begin

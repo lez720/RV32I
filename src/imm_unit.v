@@ -5,7 +5,7 @@ module imm_unit #(
     input [1:0] imm_en,
     input [WIDTH+11:0] inst_data,
 
-    output reg [11:0]  imm_out
+    output reg [11:0]  imm_out // WIDTH+21
 );
     
     // immediate 

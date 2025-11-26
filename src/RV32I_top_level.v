@@ -2,7 +2,7 @@ module RV32I_top_level #(
     parameter
         WIDTH = 32
 ) (
-    input               clk, rst,
+    input                   clk, rst,
 
     /*
     input               inst_store,
@@ -10,39 +10,39 @@ module RV32I_top_level #(
     */
 
     // output port for simulation
-    output  [WIDTH-1:0] data_out
+    output  [WIDTH-1:0]     data_out
 );
 
-    wire            	PC_MUX_sel;
-    wire [WIDTH-1:0] 	PC_MUX;
-    wire [WIDTH-1:0]    alu_out;
-    wire [WIDTH-1:0] 	PC;
-    wire            	stall;
-    wire            	nxt;
-    wire [WIDTH-1:0]    inst_addr;
-    wire [WIDTH-1:0]    inst_data;
-    wire            	port_B_sel;
-    wire    [1:0]   	port_A_sel;
-    wire    [1:0]  	    write_MUX_sel;
-    wire    [1:0]   	imm_en;
-    wire            	branch_en;
-    wire            	reg_write_en;
-    wire            	reg_read_en;
-    wire	    	    alu_valid;
-    wire            	alu_en;
-    wire [WIDTH-27:0]   alu_op;
-    wire    [1:0]   	branch_op;
-    wire    [2:0]   	load_store_op;
-    wire 		        DM_write;
-    wire 		        DM_read;
-    wire [WIDTH-1:0] 	RS1, RS2; // source register 1 & 2`
-    wire [11:0] 	    imm;
-    wire [WIDTH-1:0] 	DM_data_out;
+    wire            	    PC_MUX_sel;
+    wire    [WIDTH-1:0] 	PC_MUX;
+    wire    [WIDTH-1:0]     alu_out;
+    wire    [WIDTH-1:0] 	PC;
+    wire            	    stall;
+    wire            	    nxt;
+    wire    [WIDTH-1:0]     inst_addr;
+    wire    [WIDTH-1:0]     inst_data;
+    wire            	    port_B_sel;
+    wire    [1:0]   	    port_A_sel;
+    wire    [1:0]  	        write_MUX_sel;
+    wire    [1:0]   	    imm_en;
+    wire            	    branch_en;
+    wire            	    reg_write_en;
+    wire            	    reg_read_en;
+    wire	    	        alu_valid;
+    wire            	    alu_en;
+    wire    [4:0]           alu_op;
+    wire    [2:0]           branch_op;
+    wire    [2:0]           load_store_op;
+    wire 		            DM_write;
+    wire 		            DM_read;
+    wire    [WIDTH-1:0] 	RS1, RS2; // source register 1 & 2`
+    wire    [11:0] 	        imm;
+    wire    [WIDTH-1:0] 	DM_data_out;
 
-    reg [WIDTH-1:0] 	port_A_out, port_B_out;
-    reg [WIDTH-1:0] 	write_back;
-    reg [WIDTH-1:0] 	DM_data_in;
-    reg [WIDTH-1:0] 	Data_read;
+    reg     [WIDTH-1:0] 	port_A_out, port_B_out;
+    reg     [WIDTH-1:0] 	write_back;
+    reg     [WIDTH-1:0] 	DM_data_in;
+    reg     [WIDTH-1:0] 	Data_read;
 
 
 

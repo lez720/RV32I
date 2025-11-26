@@ -3,12 +3,13 @@ module reg_file #(
             WIDTH = 32,
             DEPTH = 32
 ) (
-    input               clk, rst,
-    input               write_en, read_en,
-    input   [WIDTH-1:0] data_in,
-    input   [4:0] write_addr, read_addr_1, read_addr_2,
+    input                   clk, rst,
+    input                   write_en, read_en,
+    input   [WIDTH-1:0]     data_in,
+    input   [WIDTH-28:0]    write_addr, 
+    input   [WIDTH-28:0]    read_addr_1, read_addr_2,
     
-    output  [WIDTH-1:0] data_out_1, data_out_2
+    output  [WIDTH-1:0]     data_out_1, data_out_2
 );
 
 reg [WIDTH-1:0] reg_file_block  [DEPTH-1:0];

@@ -26,7 +26,7 @@ reg [WIDTH-1:0] inst_mem_block  [DEPTH-1:0];
 initial begin
   inst_mem_block[0] = 8'b00010011; // write 10 in x4  
   inst_mem_block[1] = 8'b00000010;
-  inst_mem_block[2] = 8'b10100000; // 00101
+  inst_mem_block[2] = 8'b10100000; 
   inst_mem_block[3] = 8'b00000000; // 01010
 
   inst_mem_block[4] = 8'b10010011; // write 15 in x5
@@ -36,14 +36,14 @@ initial begin
 
   inst_mem_block[8] = 8'b10110011; // add x3, x4, x5
   inst_mem_block[9] = 8'b00000001;
-  inst_mem_block[10] = 8'b01010010; // 00011
+  inst_mem_block[10] = 8'b01010010; 
   inst_mem_block[11] = 8'b00000000; // 0000000 00101 00100 000 00011 0110011
-/*
-  inst_mem_block[0] = 8'b;
-  inst_mem_block[0] = 8'b;
-  inst_mem_block[0] = 8'b;
-  inst_mem_block[0] = 8'b;
 
+  inst_mem_block[12] = 8'b01101111; // s-type; store x3 into data mem addr = 03
+  inst_mem_block[13] = 8'b10110010;  
+  inst_mem_block[14] = 8'b00000001; 
+  inst_mem_block[15] = 8'b00000000; // 0000000 00000 00011 011 00100 1101111
+/*
   inst_mem_block[0] = 8'b;
   inst_mem_block[0] = 8'b;
   inst_mem_block[0] = 8'b;
