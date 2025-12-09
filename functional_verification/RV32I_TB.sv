@@ -1,0 +1,18 @@
+module RV32I_TB;
+
+logic clk, rst;
+logic [31:0] data_out;
+
+	RV32I_top_level DUT(.clk(clk), .rst(rst), .data_out(data_out));
+
+initial begin
+    clk = 0;
+    rst = 1;
+
+    #30 rst = 0;
+end
+
+always #10 clk = ~clk;
+
+endmodule
+
