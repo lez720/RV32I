@@ -7,7 +7,6 @@ module branch_unit #(
 
     output  reg [1:0]   branch
 );
-    // add branch target adder (branch target = PC + imm)
     always @(posedge clk) begin
       if (rst) begin
         branch <= 2'b00;
