@@ -67,7 +67,7 @@ module ctrl_unit #(
         PC_MUX_sel <= 0;
         alu_op <= 0;
 
-	      PC_stall <= 1;
+        PC_stall <= 1;
 
       end else if (state == IF && ~rst) begin
         port_A_sel <= 2'b00;
@@ -114,10 +114,10 @@ module ctrl_unit #(
                   alu_op <= 5'b01110; 
                 end
                 3'b010: begin // signed comparison
-                  //operation <= 5'b;
+                  alu_op <= 5'b00101;
                 end
                 3'b011: begin // unsigned comparison
-                  //operation <= 5'b;
+                  alu_op <= 5'b00101;
                 end
                 3'b100: begin // bitwise XOR
                   alu_op <= 5'b01101;
@@ -172,10 +172,10 @@ module ctrl_unit #(
                 3'b101: begin
                   case (func7)
                      7'b0000000: begin // shift right logical
-              
+                        alu_op <= 5'b01111; 
                      end
                      7'b0100000 : begin // shift right arithmetic 
-
+                        alu_op <= 5'b10000;
                      end
                   endcase
                 end
