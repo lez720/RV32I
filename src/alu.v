@@ -17,6 +17,9 @@ module alu #(
     if (rst) begin
       data_out <= 32'b0;
       valid <= 0;
+      Z_flag <= 0;
+      G_flag <= 0;
+      L_flag <= 0;
     end
     else if (en) begin
       case (operation)
@@ -35,13 +38,15 @@ module alu #(
         5'b00101: begin // compare
           data_out <= port_A - port_B;
           if (data_out == 0) begin
-
+            Z_flag <= 1;
           end else if (data_out > 0) begin
-
+            G_flag <= 1;
           end else if (data_out < 0) begin
-
+            L_flag <= 1;
           end else begin
-            
+            Z_flag <= 0;
+            G_flag <= 0;
+            L_flag <= 0;
           end
         end
         5'b00110: begin // multiply high unsigned
