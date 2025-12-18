@@ -8,9 +8,9 @@ module alu #(
 
     output  reg  [WIDTH-1:0]     data_out,
     output  reg                  valid,
-    output  reg                  zero_flag,
-    output  reg                  greater_flag,
-    output  reg                  lesser_flag
+    output  reg                  ZF,
+    output  reg                  GF,
+    output  reg                  LF
 );
 
   always @(posedge clk) begin
