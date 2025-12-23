@@ -92,6 +92,9 @@ module alu #(
       valid <= 1;
     end else begin 
       valid <= 0;
+      Z_flag <= 0;
+      G_flag <= 0;
+      L_flag <= 0;
     end
   end
 
