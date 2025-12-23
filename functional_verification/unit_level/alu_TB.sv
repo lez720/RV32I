@@ -58,6 +58,7 @@ module alu_TB;
         port_B = 0;
         en = 1;
 
+
     $display("Operation: Addition");
     for ( int i = 0; i < 50 ; i++ ) begin
       if (~valid) begin
@@ -94,6 +95,8 @@ module alu_TB;
     port_B = 0;
     #200;
     rst = 0;
+
+
     $display("Operation: Negate");
     for ( int i = 0; i < 50 ; i++ ) begin
       if (~valid) begin
@@ -129,6 +132,8 @@ module alu_TB;
     port_B = 0;
     #200;
     rst = 0;
+
+
     $display("Operation: Subract");
     for ( int i = 0; i < 50 ; i++ ) begin
       if (~valid) begin
@@ -165,6 +170,8 @@ module alu_TB;
     port_B = 0;
     #200;
     rst = 0;
+
+
     $display("Operation: Multiplication");
     for ( int i = 0; i < 50 ; i++ ) begin
       if (~valid) begin
@@ -201,6 +208,8 @@ module alu_TB;
     port_B = 0;
     #200;
     rst = 0;
+
+
     $display("Operation: Comparation");
     for ( int i = 0; i < 50 ; i++ ) begin
       if (~valid) begin
@@ -244,6 +253,8 @@ module alu_TB;
     port_B = 0;
     #200;
     rst = 0;
+
+    
     $display("Operation: Divide");
     for ( int i = 0; i < 50 ; i++ ) begin
       if (~valid) begin
