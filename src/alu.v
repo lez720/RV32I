@@ -45,7 +45,7 @@ module alu #(
             L_flag <= 1;
           end else begin
             Z_flag <= 0;
-            G_flag <= 0;
+            G_flag <= 0;1
             L_flag <= 0;
           end
         end
@@ -93,6 +93,7 @@ module alu #(
         end
         5'b11011: begin
           data_out <= port_A + (port_B << 1);
+        end
       default: begin
         data_out <= 32'b0;
       end
