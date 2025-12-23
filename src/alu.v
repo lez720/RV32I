@@ -85,6 +85,14 @@ module alu #(
         5'b11000: begin
           data_out <= port_B; // immediate to data memory address
         end
+        5'b11001: begin
+          data_out <= port_A << 12;
+        end
+        5'b11010: begin
+          data_out <= port_A + (port_B << 12);
+        end
+        5'b11011: begin
+          data_out <= port_A + (port_B << 1);
       default: begin
         data_out <= 32'b0;
       end
