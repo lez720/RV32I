@@ -313,13 +313,24 @@ module ctrl_unit #(
 	    end
 
             // U-type
-            7'b0010111 : begin
+            7'b0010111 : begin // LUI
               inst_type <= U_type;
+
+              imm_en <= 2'b11;
+              alu_op <= 5'b11001;
+
+              port_A_sel <= 2'b11;
 
               state <= EX;
             end
-            7'b0110111 : begin
+            7'b0110111 : begin // AUIPC
               inst_type <= U_type;
+              
+              imm_en <= 2'b11;
+              alu_op <= 5'b11010;
+
+              port_A_sel <= 2'b10;
+              port_B_sel <= 1;
 
               state <= EX;
             end
@@ -327,12 +338,15 @@ module ctrl_unit #(
             // J-type
             7'b1101111 : begin
               inst_type <= J_type;
-              imm_en <= 2'b11;
+
+              write_MUX_sel <= 2'b01;
+
+              imm_en <= 2'b10;
 
               port_A_sel <= 2'b10;
               port_B_sel <= 1;
 
-              alu_op <= 5'b00001;
+              alu_op <= 5'b11011;
 
               state <= EX;
             end
@@ -358,12 +372,25 @@ module ctrl_unit #(
 	              PC_stall <= 0;
              end
              U_type: begin
-                state <= IF;
-		            PC_stall <= 0;
+               case (opcode)
+               7'b0010111 : begin // LUI
+               write_MUX_sel <= 2'b11;
+
+               state <= WB;
+             end
+               7'b0110111 : begin // AUIPC
+               PC_MUX_sel <= 0;
+
+               PC_stall <= 0;
+               state <= IF;
+             end
+                endcase
              end
              J_type: begin
-                state <= IF;
-		            PC_stall <= 0;
+               PC_MUX_sel <= 0;
+
+               PC_stall <= 0;
+               state <= IF;
              end
           default: begin
             state <= EX; 
@@ -374,10 +401,12 @@ module ctrl_unit #(
         end
       end else if (state == MEM && ~rst) begin 
         DM_write_en <= 1;
+
         state <= IF;
 	      PC_stall <= 0;
       end else if (state == WB && ~rst) begin
         reg_write_en <= 1;
+
         state <= IF;
 	      PC_stall <= 0;
       end
