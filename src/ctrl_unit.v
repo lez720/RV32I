@@ -317,7 +317,7 @@ module ctrl_unit #(
               inst_type <= U_type;
 
               imm_en <= 2'b11;
-              alu_op <= 5'b11001;
+              alu_op <= 5'b10010;
 
               port_A_sel <= 2'b11;
 
@@ -327,7 +327,7 @@ module ctrl_unit #(
               inst_type <= U_type;
               
               imm_en <= 2'b11;
-              alu_op <= 5'b11010;
+              alu_op <= 5'b10011;
 
               port_A_sel <= 2'b10;
               port_B_sel <= 1;
@@ -346,7 +346,7 @@ module ctrl_unit #(
               port_A_sel <= 2'b10;
               port_B_sel <= 1;
 
-              alu_op <= 5'b11011;
+              alu_op <= 5'b10100;
 
               state <= EX;
             end
