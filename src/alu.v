@@ -82,16 +82,16 @@ module alu #(
         5'b10000: begin // shift right arithmetic
           data_out <= port_A >>> 1;
         end 
-        5'b11000: begin
+        5'b10001: begin
           data_out <= port_B; // immediate to data memory address
         end
-        5'b11001: begin
+        5'b10010: begin // load upper immediate
           data_out <= port_A << 12;
         end
-        5'b11010: begin
+        5'b10011: begin // add upper immediate to PC
           data_out <= port_A + (port_B << 12);
         end
-        5'b11011: begin
+        5'b10100: begin // Jump
           data_out <= port_A + (port_B << 1);
         end
       default: begin
