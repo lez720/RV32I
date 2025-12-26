@@ -5,19 +5,12 @@ Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 
 Top level modules:
 	RV32I_top_level
 
-} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/prog_ctr.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/prog_ctr.v
+} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/data_mem.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/data_mem.v
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
--- Compiling module prog_ctr
+-- Compiling module data_mem
 
 Top level modules:
-	prog_ctr
-
-} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/ctrl_unit.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/ctrl_unit.v
-Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
--- Compiling module ctrl_unit
-
-Top level modules:
-	ctrl_unit
+	data_mem
 
 } {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/inst_mem.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/inst_mem.v
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
@@ -26,19 +19,20 @@ Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 
 Top level modules:
 	inst_mem
 
-} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/data_mem.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/data_mem.v
+} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/prog_ctr.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/prog_ctr.v
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
--- Compiling module data_mem
+-- Compiling module prog_ctr
 
 Top level modules:
-	data_mem
+	prog_ctr
 
-} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/branch_unit.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/branch_unit.v
+} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/functional_verification/unit_level/alu_TB.sv {1 {vlog -work work -sv -cover sbce3 -stats=none /home/lez/Documents/Projects/Architecture/RV32I/functional_verification/unit_level/alu_TB.sv
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
--- Compiling module branch_unit
+-- Compiling package alu_TB_sv_unit
+-- Compiling module alu_TB
 
 Top level modules:
-	branch_unit
+	alu_TB
 
 } {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/reg_file.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/reg_file.v
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
@@ -47,14 +41,19 @@ Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 
 Top level modules:
 	reg_file
 
-} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/alu.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/alu.v
+} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/branch_unit.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/branch_unit.v
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
--- Compiling module alu
+-- Compiling module branch_unit
 
 Top level modules:
-	alu
+	branch_unit
 
-} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/imm_unit.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/imm_unit.v
+} {} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/alu.v {0 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/alu.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module alu
+** Error: (vlog-13069) /home/lez/Documents/Projects/Architecture/RV32I/src/alu.v(48): near "1": syntax error, unexpected INTEGER NUMBER.
+
+} {4.0 5.0} {}} /home/lez/Documents/Projects/Architecture/RV32I/src/imm_unit.v {1 {vlog -work work -stats=none /home/lez/Documents/Projects/Architecture/RV32I/src/imm_unit.v
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
 -- Compiling module imm_unit
 
