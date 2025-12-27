@@ -110,25 +110,25 @@ module alu_TB;
       BF.op_c = operation;
       port_A = BF.port_A_c;
       port_B = BF.port_B_c;
-    
-      
+
       ans = port_A + port_B;
       #20;
       if (valid) begin
+        BF.out_c = out;
       	if (out == ans) begin
           status = "Success";
       	end else begin
  	  status = "Failed";
       	end
         en = 0;
+        BF.out_c = out;
+        $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
+        BF.display();
+   
+        $display(" ");
       end
       else en = 1;
-      BF.out_c = out;
-      #10;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
+      
     end
     rst = 1;
     port_A = 0;
@@ -152,20 +152,21 @@ module alu_TB;
       ans = ~port_A;
       #20;
       if (valid) begin
+        BF.out_c = out;
       	if (out == ans) begin
           status = "Success";
       	end else begin
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
-      #10;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -191,20 +192,21 @@ module alu_TB;
       ans = port_A - port_B;
       #20;
       if (valid) begin
+        BF.out_c = out;
       	if (out == ans) begin
           status = "Success";
       	end else begin
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
-      #10;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -236,14 +238,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
-      #10;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -275,9 +277,7 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
+        BF.out_c = out;
       if (ans == 0) begin
 	flag = "zero flag";
       end else if (ans > 0) begin
@@ -289,6 +289,9 @@ module alu_TB;
       $display(" Expected FLAG: %0s | ZF: %0d | GTF: %0d | LTF: %0d | Out: %0d", flag, Z_flag, G_flag, L_flag, out);
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -320,13 +323,13 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
     end
     rst = 1;
     port_A = 0;
@@ -357,13 +360,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -394,13 +398,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -431,13 +436,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -468,13 +474,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -505,13 +512,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -542,13 +550,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -579,13 +588,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -616,13 +626,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -653,13 +664,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -690,13 +702,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
     rst = 1;
     port_A = 0;
@@ -727,13 +740,14 @@ module alu_TB;
  	  status = "Failed";
       	end
         en = 0;
-      end
-      else en = 1;
       BF.out_c = out;
       $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
       BF.display();
    
       $display(" ");
+      end
+      else en = 1;
+
     end
 
   end

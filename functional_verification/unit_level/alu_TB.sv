@@ -1,737 +1,147 @@
-
 class base;
-  bit [4:0] op_c;
-  randc bit [31:0] port_A_c, port_B_c;
-  bit [31:0] out_c;
+  bit [4:0] opcode;
+  rand bit [31:0] port_A, port_B;
+  bit [31:0] result;
 
- // constraint op_const {op_c < 24;}
+  bit [31:0] ex_result;
 
-
- function void display();
-   $display("Operation : %0d       | Port A : %0d       | Port B : %0d       | Output : %0d       ", op_c, port_A_c, port_B_c, out_c);
- endfunction
-
-/*
-  function void display(bit answer);
-  for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-        en = 1;
-      end else if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b00001; // addition
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-    
-    
-      #20;
-      if (valid) begin
-      	if (out == answer) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, answer);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-  endfunction
-  */
-
- function void random(); // custom randomize() function (modelsim doesnt allow randomize, assertion, coverage)
-   port_A_c = $random;
-   port_B_c = $random;
- endfunction
-
-endclass 
-
-module alu_TB;
-  localparam WIDTH = 32;
-
-  logic [WIDTH-1:0] port_A, port_B, out;
-
-  logic [4:0] operation;
-
-  logic en, rst, clk, valid;
+  logic rst, en, valid;
 
   logic Z_flag, G_flag, L_flag;
 
   string status;
 
-  string flag;
+  localparam ADD = 1;
+  localparam NEG = 2;
+  localparam SUB = 3;
+  localparam MUL = 4;
+  localparam COM = 5;
+  localparam DIV = 8;
+  localparam REM = 9;
+  localparam AND = 10;
+  localparam OR = 12;
+  localparam XOR = 13;
+  localparam SLL = 14;
+  localparam SRL = 15;
+  localparam SRA = 16;
+  localparam IDM = 17;
+  localparam LUI = 18;
+  localparam AUIPC = 19;
+  localparam JAL = 20;
 
-  logic [WIDTH-1:0] ans;
+ function void gen_input();
+      port_A = $random;
+      port_B = $random;
+ endfunction
 
-  alu alu_DUT (.clk(clk), .rst(rst), .en(en),
-        .port_A(port_A), .port_B(port_B), .operation(operation),
-        .data_out(out),. valid(valid), .Z_flag(Z_flag),
-        .G_flag(G_flag), .L_flag(L_flag));
+  function void display();
+    case (opcode)
+        ADD : ex_result = port_A + port_B;
+        NEG : ex_result = ~port_A;
+        SUB : ex_result = port_A - port_B;
+        MUL : ex_result = port_A * port_B;
+        COM : begin
+	      ex_result = 0;
+	      end
+        DIV : ex_result = port_A / port_B;
+        REM : ex_result = port_A % port_B;
+        AND : ex_result = port_A && port_B;
+        OR  : ex_result = port_A || port_B;
+        XOR : ex_result = port_A ^ port_B;
+        SLL : ex_result = port_A << 1;
+        SRL : ex_result = port_A >> 1;
+        SRA : ex_result = port_A >>> 1;
+        IDM : ex_result = port_B;
+        LUI : ex_result = port_A << 12;
+        AUIPC : ex_result = port_A + (port_B << 12);
+        JAL : ex_result = port_A + (port_B << 1);
+        default: ex_result = ex_result;
+      endcase
 
+    if (result == ex_result) begin
+      status = "Success";
+    end else begin
+      status = "Failed";
+    end
+
+    $display("No: | Status: %0s | Expected: %0d ", status, ex_result);
+    $display("Port A : %0d       | Port B : %0d       | Actual : %0d       ",  port_A, port_B, result);
+    $display(" "); 
+
+  endfunction
+endclass 
+
+module alu_TB;
+
+  logic clk;
+
+  bit [4:0] opcode;
+  bit [31:0] port_A, port_B;
+  bit [31:0] result;
+
+  bit [31:0] ex_result;
+
+  logic rst, en, valid;
+
+  logic Z_flag, G_flag, L_flag;
+
+  
+
+  alu alu_DUT (
+    .clk(clk), .rst(rst), .en(en),
+    .port_A(port_A), .port_B(port_B), .operation(opcode),
+    .data_out(result),. valid(valid), .Z_flag(Z_flag),
+    .G_flag(G_flag), .L_flag(L_flag)
+    );
 
   always #15 clk = ~clk;
-	
-  base BF;
+
+  base stim; 
 
   initial begin
 
-    BF = new();
+    stim = new();
     
-    rst = 1;
-    en = 0;
-    operation = 0;
-    clk = 0;
-    #50 rst = 0;
-        port_A = 0;
-        port_B = 0;
-        en = 1;
+    clk <= 0;
+    rst <= 1;
+    en <= 0;
+    opcode <= 0;
 
+    #100;
+ 
+    for ( int op = 0; op < 20; op++) begin
 
-    $display("Operation: Addition");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-        en = 1;
-      end else if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b00001; // addition
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
+      rst <= 0;
+      opcode <= opcode + 1; // increment to change opcode
+
+      $display("Operation: %0h", opcode);
+      for ( int i = 0; i < 50; i++) begin
+        stim.opcode = opcode;
+        stim.gen_input();
+
+        port_A <= stim.port_A;
+        port_B <= stim.port_B;
+        stim.opcode <= opcode;
+
+        en <= 1;
+
+        #60; // wait for ALU output
+        if (valid) begin
+          stim.result = result;
+          en <= 0;
+          stim.display();
+        end else begin
+          stim.result = stim.result;
+        end
+        #30;
+      end
+
+      rst <= 1;
+      port_A <= 0;
+      port_B <= 0;
+      #200;
+    end
     
-      
-      ans = port_A + port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: Negate");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end
-      operation = 5'b00010; // negate
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = ~port_A;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-
-    $display("Operation: Subract");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end
-      operation = 5'b00011; // subraction
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A - port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-
-    $display("Operation: Multiplication");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b00100; // multiplication
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A * port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-
-    $display("Operation: Comparation");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b00101; // compare
-    BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A - port_B;
-    
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      if (ans == 0) begin
-	flag = "zero flag";
-      end else if (ans > 0) begin
-	flag = "GT flag";
-      end else if (ans < 0) begin
-	flag = "LT flag";
-      end
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      $display(" Expected FLAG: %0s | ZF: %0d | GTF: %0d | LTF: %0d | Out: %0d", flag, Z_flag, G_flag, L_flag, out);
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-
-    $display("Operation: Divide");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b01000; // division
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A / port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: Modulo");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b01001; // modulo
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A % port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: AND");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b01010; // AND operation
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A && port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: OR");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b01100; // OR operation
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A || port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: XOR");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b01101; // XOR operation
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A ^ port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: Shift Left Logical");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b01110;
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A << 1;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: Shift Right Logical");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b01111;
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A >> 1;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: Shift Right Arithmetic");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b10000;
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A >> 1;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: imm to mem address");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b10001; 
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_B;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: Load Uppper Immediate");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b10010;
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A << 12;
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: Add Uppper Immediate to PC");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b10011;
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A + (port_B << 12);
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-    rst = 1;
-    port_A = 0;
-    port_B = 0;
-    #200;
-    rst = 0;
-
-    $display("Operation: Jump");
-    for ( int i = 0; i < 50 ; i++ ) begin
-      if (~valid) begin
-       en = 1;
-      end else  if (~rst && valid) begin
-        en = 0;
-        BF.random();
-      end 
-      operation = 5'b10100;
-
-      BF.op_c = operation;
-      port_A = BF.port_A_c;
-      port_B = BF.port_B_c;
-      
-      ans = port_A + (port_B << 1);
-      #20;
-      if (valid) begin
-      	if (out == ans) begin
-          status = "Success";
-      	end else begin
- 	  status = "Failed";
-      	end
-        en = 0;
-      end
-      else en = 1;
-      BF.out_c = out;
-      $display("No: %0d | Status: %0s | Expected: %0d ", i, status, ans);
-      BF.display();
-   
-      $display(" ");
-    end
-
   end
-endmodule
 
+endmodule
