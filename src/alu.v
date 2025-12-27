@@ -45,53 +45,47 @@ module alu #(
             L_flag <= 1;
           end else begin
             Z_flag <= 0;
-            G_flag <= 0;1
+            G_flag <= 0;
             L_flag <= 0;
           end
         end
-        5'b00110: begin // multiply high unsigned
-          
-        end
-        5'b00111: begin // multiply high unsigned signed
-          
-        end
-        5'b01000: begin // divide
+        5'b00110: begin // divide
           data_out <= port_A / port_B; 
         end
-        5'b01001: begin // remainder
+        5'b00111: begin // remainder
           data_out <= port_A % port_B; 
         end
-        5'b01010: begin // AND
+        5'b01000: begin // AND
           data_out <= port_A && port_B; 
         end
-        5'b01011: begin // NOT
+        5'b01001: begin // NOT
           data_out <= ~port_A;
         end
-        5'b01100: begin // OR
+        5'b01010: begin // OR
           data_out <= port_A || port_B; 
         end
-        5'b01101: begin // XOR
+        5'b01011: begin // XOR
           data_out <= port_A ^ port_B;
         end
-        5'b01110: begin // shift left logical
+        5'b01100: begin // shift left logical
           data_out <= port_A << 1;
         end
-        5'b01111: begin // shift right logical
+        5'b01101: begin // shift right logical
           data_out <= port_A >> 1;
         end
-        5'b10000: begin // shift right arithmetic
+        5'b01110: begin // shift right arithmetic
           data_out <= port_A >>> 1;
         end 
-        5'b10001: begin
+        5'b01111: begin
           data_out <= port_B; // immediate to data memory address
         end
-        5'b10010: begin // load upper immediate
+        5'b10000: begin // load upper immediate
           data_out <= port_A << 12;
         end
-        5'b10011: begin // add upper immediate to PC
+        5'b10001: begin // add upper immediate to PC
           data_out <= port_A + (port_B << 12);
         end
-        5'b10100: begin // Jump
+        5'b10010: begin // Jump
           data_out <= port_A + (port_B << 1);
         end
       default: begin
