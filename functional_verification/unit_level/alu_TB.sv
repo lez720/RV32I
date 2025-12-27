@@ -41,7 +41,17 @@ class base;
         SUB : ex_result = port_A - port_B;
         MUL : ex_result = port_A * port_B;
         COM : begin
-	      ex_result = 0;
+	        ex_result = port_A - port_B;
+            Z_flag = 0;
+            G_flag = 0;
+            L_flag = 0;
+            if (ex_result == 0) begin
+              Z_flag = 1;
+            end else if (ex_result > 0) begin
+              G_flag = 1;
+            end else if (ex_result < 0) begin
+              L_flag = 1;
+            end
 	      end
         DIV : ex_result = port_A / port_B;
         REM : ex_result = port_A % port_B;
