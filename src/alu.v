@@ -56,13 +56,13 @@ module alu #(
           data_out <= port_A % port_B; 
         end
         5'b01000: begin // AND
-          data_out <= port_A && port_B; 
+          data_out <= port_A & port_B; 
         end
         5'b01001: begin // NOT
           data_out <= ~port_A;
         end
         5'b01010: begin // OR
-          data_out <= port_A || port_B; 
+          data_out <= port_A | port_B; 
         end
         5'b01011: begin // XOR
           data_out <= port_A ^ port_B;

@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 class base;
   bit [4:0] opcode;
   rand bit [31:0] port_A, port_B;
@@ -95,6 +97,15 @@ module alu_TB;
   logic rst, en, valid;
 
   logic Z_flag, G_flag, L_flag;
+  
+  string op_name;
+  string op_list[] = { 
+    " ", "ADD", "NEG", "SUB", "MUL",
+    "COM", "DIV", "REM", "AND", 
+    "NOT", "OR", "XOR", "SLL", 
+    "SRL", "SRA", "IDM", "LUI",
+    "AUIPC", "JAL"
+    };
 
   
 
@@ -116,16 +127,14 @@ module alu_TB;
     clk <= 0;
     rst <= 1;
     en <= 0;
-    opcode <= 0;
+    opcode = 0;
 
     #100;
- 
-    for ( int op = 0; op < 20; op++) begin
-
+    for ( int op = 0; op < 18; op++) begin
+      opcode = opcode + 1; // increment to change opcode
       rst <= 0;
-      opcode <= opcode + 1; // increment to change opcode
-
-      $display("Operation: %0h", opcode);
+      op_name = op_list[opcode];
+      $display("Operation: %0s(%0d)", op_name, opcode);
       for ( int i = 0; i < 50; i++) begin
         stim.opcode = opcode;
         stim.gen_input();
@@ -151,6 +160,7 @@ module alu_TB;
       port_A <= 0;
       port_B <= 0;
       #200;
+      
     end
     
   end

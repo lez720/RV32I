@@ -4,17 +4,22 @@ module alu #(
 ) (
     input                   clk, rst, en,
     input   [WIDTH-1:0]     port_A, port_B,
-    input   [WIDTH-27:0]    operation,
+    input   [WIDTH-28:0]    operation,
 
     output  reg  [WIDTH-1:0]     data_out,
-
-    output  reg             valid
+    output  reg                  valid,
+    output  reg                  Z_flag,
+    output  reg                  G_flag,
+    output  reg                  L_flag
 );
 
   always @(posedge clk) begin
     if (rst) begin
       data_out <= 32'b0;
       valid <= 0;
+      Z_flag <= 0;
+      G_flag <= 0;
+      L_flag <= 0;
     end
     else if (en) begin
       case (operation)
@@ -30,8 +35,19 @@ module alu #(
         5'b00100: begin // multiply
           data_out <= port_A * port_B; 
         end
-        5'b00101: begin // multiply high
-          
+        5'b00101: begin // compare
+          data_out <= port_A - port_B;
+          if (data_out == 0) begin
+            Z_flag <= 1;
+          end else if (data_out > 0) begin
+            G_flag <= 1;
+          end else if (data_out < 0) begin
+            L_flag <= 1;
+          end else begin
+            Z_flag <= 0;
+            G_flag <= 0;1
+            L_flag <= 0;
+          end
         end
         5'b00110: begin // multiply high unsigned
           
@@ -55,48 +71,39 @@ module alu #(
           data_out <= port_A || port_B; 
         end
         5'b01101: begin // XOR
-          
+          data_out <= port_A ^ port_B;
         end
         5'b01110: begin // shift left logical
-          
+          data_out <= port_A << 1;
         end
         5'b01111: begin // shift right logical
-          
+          data_out <= port_A >> 1;
         end
         5'b10000: begin // shift right arithmetic
-          
+          data_out <= port_A >>> 1;
         end 
-        5'b11000: begin
+        5'b10001: begin
           data_out <= port_B; // immediate to data memory address
         end
-        5'b11001: begin
-          
+        5'b10010: begin // load upper immediate
+          data_out <= port_A << 12;
         end
-        5'b11010: begin
-          
-        end /*
-        5'b11011: begin
-          
+        5'b10011: begin // add upper immediate to PC
+          data_out <= port_A + (port_B << 12);
         end
-        5'b11100: begin
-          
+        5'b10100: begin // Jump
+          data_out <= port_A + (port_B << 1);
         end
-        5'b11101: begin
-          
-        end
-        5'b11110: begin
-          
-        end
-        5'b11111: begin
-          
-        end */
       default: begin
-        // data_out <= 32'b0;
+        data_out <= 32'b0;
       end
       endcase
       valid <= 1;
     end else begin 
       valid <= 0;
+      Z_flag <= 0;
+      G_flag <= 0;
+      L_flag <= 0;
     end
   end
 
