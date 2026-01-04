@@ -31,5 +31,4 @@ For the synthesis, the design uses the `sky130_fd_sc_hd__tt_100C_1v80` library. 
 - Neovim (RTL Design)
 - ModelSim (Functional Verification)
 - Yosys (Synthesis)
-- OpenSTA (Timing Analysis)
 - Git (Version Control)
